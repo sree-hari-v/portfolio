@@ -30,8 +30,8 @@ This project utilizes a clean, modern tech stack focused on performance and resp
 * **📱 Mobile Navigation:** Smooth slide-out menu for smaller devices.
 * **🚀 Optimized Assets:** Uses SVG favicons and lightweight code.
 
-📬 Contact
-Sreehari V
-📧 Email: sreehari.vengalil@gmail.com
-🐙 GitHub: sree-hari-v
-© 2026 Sreehari V. All Rights Reserved.
+##📬 Contact
+* **Sreehari V
+* **📧 Email: sreehari.vengalil@gmail.com
+* **🐙 GitHub: sree-hari-v
+* **© 2026 Sreehari V. All Rights Reserved.
