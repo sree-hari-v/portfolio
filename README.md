@@ -12,11 +12,6 @@ Check out the live version of the website at the links below:
 | **Vercel** | [**sreehari-v-portfolio.vercel.app**](https://sreehari-v-portfolio.vercel.app/) |
 
 ---
-
-## 📸 Screenshots
-
-![Portfolio Preview](https://via.placeholder.com/800x400?text=Portfolio+Preview+Image)
-
 ## 🛠️ Built With
 
 This project utilizes a clean, modern tech stack focused on performance and responsiveness.
@@ -34,17 +29,6 @@ This project utilizes a clean, modern tech stack focused on performance and resp
 * **🌘 Dark Mode Theme:** A modern aesthetic using a custom color palette (`#050505` Bg, `#ff0000` Accent).
 * **📱 Mobile Navigation:** Smooth slide-out menu for smaller devices.
 * **🚀 Optimized Assets:** Uses SVG favicons and lightweight code.
-
-## 📂 Directory Structure
-
-```bash
-portfolio/
-├── index.html      # Main HTML structure
-├── style.css       # All styling and media queries
-├── script.js       # Logic for animations and navigation
-└── assets/         # Images and icons
-
-
 
 📬 Contact
 Sreehari V
