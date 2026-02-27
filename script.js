@@ -58,7 +58,7 @@ const projects = [
         existingProblems: "Managing student data manually leads to inconsistency and security risks in resource distribution.",
         solvedProblems: "Integrated Supabase for secure data storage with role-based access control and streamlined Next.js dashboard.",
         techUsed: ["Next.js", "Supabase", "React.js", "Tailwind CSS"],
-        liveLink: "https://github.com/sree-hari-v/Edunex",
+        liveLink: "https://edunex-bot.vercel.app/",
         githubLink: "https://github.com/sree-hari-v/Edunex"
     },
     {
@@ -68,7 +68,7 @@ const projects = [
         solvedProblems: "Developed a responsive dashboard with categorized projects, smooth animations, and direct access to source code.",
         techUsed: ["HTML5", "CSS3", "JavaScript", "Intersection Observer API"],
         liveLink: "https://cs-tech-hub.vercel.app/",
-        githubLink: "https://github.com/sree-hari-v"
+        githubLink: "https://github.com/sree-hari-v/cs-tech-hub"
     },
     {
         title: "Grievance Portal",
@@ -77,7 +77,7 @@ const projects = [
         solvedProblems: "Built a transparent system for real-time reporting and status tracking, enhancing accountability and resolution speed.",
         techUsed: ["Next.js", "Tailwind CSS", "Firebase", "TypeScript"],
         liveLink: "https://cs-dept-grievance-portal.vercel.app/",
-        githubLink: "https://github.com/sree-hari-v"
+        githubLink: "https://github.com/sree-hari-v/department-grievance-portal"
     }
 ];
 
@@ -98,8 +98,8 @@ function selectProject(index, event) {
         <div class="detail-header">
             <h2>${project.title}</h2>
             <div class="detail-links">
-                <a href="${project.githubLink}" class="detail-link-btn"><i class="fab fa-github"></i> GitHub</a>
-                <a href="${project.liveLink}" class="detail-link-btn detail-link-live"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                <a href="${project.githubLink}" class="detail-link-btn" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> GitHub</a>
+                <a href="${project.liveLink}" class="detail-link-btn detail-link-live" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i> Live Demo</a>
             </div>
         </div>
         <div class="detail-content">

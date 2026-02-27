@@ -643,6 +643,103 @@ section { padding: 160px 10%; }
     .tech-badge { padding: 5px 12px; font-size: 0.72rem; }
 }
 
+/* --- EDUCATION --- */
+.education-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.edu-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 30px 32px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.edu-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--primary);
+    border-radius: 4px 0 0 4px;
+    transform: scaleY(0);
+    transition: transform 0.4s ease;
+    transform-origin: bottom;
+}
+
+.edu-card:hover::before { transform: scaleY(1); }
+
+.edu-card:hover {
+    border-color: rgba(255,0,0,0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 35px rgba(255,0,0,0.12);
+}
+
+.edu-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    background: rgba(255,0,0,0.1);
+    border: 1px solid rgba(255,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--primary);
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.edu-card:hover .edu-icon {
+    background: rgba(255,0,0,0.2);
+    transform: rotate(-5deg) scale(1.1);
+}
+
+.edu-card-right { flex: 1; }
+
+.edu-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-family: 'Fira Code', monospace;
+    color: var(--primary);
+    background: rgba(255,0,0,0.08);
+    border: 1px solid rgba(255,0,0,0.25);
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.edu-card-right h3 {
+    font-size: 1.25rem;
+    color: var(--text-white);
+    margin-bottom: 8px;
+}
+
+.edu-school, .edu-location {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edu-school i, .edu-location i {
+    color: var(--primary);
+    font-size: 0.8rem;
+    width: 14px;
+}
+
 /* --- CONTACT --- */
 .contact-container { text-align: center; max-width: 600px; margin: 0 auto; padding: 0 20px;}
 .email-btn {
@@ -658,6 +755,66 @@ section { padding: 160px 10%; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 .cursor { display: inline-block; width: 3px; background-color: var(--primary); animation: blink 1s infinite; }
+
+/* Pulse glow on skill items */
+@keyframes skillPulse {
+    0%, 100% { box-shadow: 0 0 0px rgba(255,0,0,0); }
+    50% { box-shadow: 0 0 18px rgba(255,0,0,0.35); }
+}
+.skill-item:hover img { animation: skillPulse 1.2s ease-in-out infinite; border-radius: 14px; }
+
+/* Shimmer sweep on project/edu cards */
+@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+.project-card::after, .edu-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+.project-card:hover::after, .edu-card:hover::after {
+    opacity: 1;
+    animation: shimmer 1.2s linear infinite;
+}
+
+/* Staggered show for skill items */
+.skills-grid.show .skill-item:nth-child(1)  { transition-delay: 0.05s; }
+.skills-grid.show .skill-item:nth-child(2)  { transition-delay: 0.10s; }
+.skills-grid.show .skill-item:nth-child(3)  { transition-delay: 0.15s; }
+.skills-grid.show .skill-item:nth-child(4)  { transition-delay: 0.20s; }
+.skills-grid.show .skill-item:nth-child(5)  { transition-delay: 0.25s; }
+.skills-grid.show .skill-item:nth-child(6)  { transition-delay: 0.30s; }
+.skills-grid.show .skill-item:nth-child(7)  { transition-delay: 0.35s; }
+.skills-grid.show .skill-item:nth-child(8)  { transition-delay: 0.40s; }
+.skills-grid.show .skill-item:nth-child(9)  { transition-delay: 0.45s; }
+.skills-grid.show .skill-item:nth-child(10) { transition-delay: 0.50s; }
+.skills-grid.show .skill-item:nth-child(11) { transition-delay: 0.55s; }
+.skills-grid.show .skill-item:nth-child(12) { transition-delay: 0.60s; }
+.skills-grid.show .skill-item:nth-child(13) { transition-delay: 0.65s; }
+.skills-grid.show .skill-item:nth-child(14) { transition-delay: 0.70s; }
+.skills-grid.show .skill-item:nth-child(15) { transition-delay: 0.75s; }
+.skills-grid.show .skill-item:nth-child(16) { transition-delay: 0.80s; }
+.skills-grid.show .skill-item:nth-child(17) { transition-delay: 0.85s; }
+.skills-grid.show .skill-item:nth-child(18) { transition-delay: 0.90s; }
+.skills-grid.show .skill-item:nth-child(19) { transition-delay: 0.95s; }
+.skills-grid.show .skill-item:nth-child(20) { transition-delay: 1.00s; }
+.skills-grid.show .skill-item:nth-child(21) { transition-delay: 1.05s; }
+.skills-grid.show .skill-item:nth-child(22) { transition-delay: 1.10s; }
+
+/* Section title underline grow animation */
+@keyframes lineGrow { from { width: 0; } to { width: 60px; } }
+.section-title.show::after { animation: lineGrow 0.6s ease forwards; }
+
+/* Fade-slide for edu cards */
+.education-container.show .edu-card:nth-child(1) { transition-delay: 0.1s; }
+.education-container.show .edu-card:nth-child(2) { transition-delay: 0.25s; }
 
 /* =========================================
     FLUID RESPONSIVENESS
@@ -732,4 +889,10 @@ section { padding: 160px 10%; }
     
     /* Ensure project grid doesn't squash too much */
     .project-grid { grid-template-columns: 1fr; }
+
+    /* Education cards stacked on small phones */
+    .edu-card { flex-direction: column; gap: 14px; padding: 20px 18px; }
+    .edu-icon { width: 44px; height: 44px; font-size: 1.1rem; }
+    .edu-card-right h3 { font-size: 1rem; }
+    .edu-school, .edu-location { font-size: 0.82rem; }
 }
