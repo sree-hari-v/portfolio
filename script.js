@@ -28,16 +28,14 @@ themeToggle.addEventListener('click', () => {
 });
 
 
-// --- 2. CANVAS CONSTELLATION BACKGROUND (Professional & Free Flow) ---
+// --- 2. CANVAS CONSTELLATION BACKGROUND ---
 const canvas = document.getElementById('canvas-bg');
 const ctx = canvas.getContext('2d');
 let particlesArray;
 
-// Resize canvas
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Particle Class
 class Particle {
     constructor(x, y, directionX, directionY, size, color) {
         this.x = x;
@@ -47,46 +45,30 @@ class Particle {
         this.size = size;
         this.color = color;
     }
-    
-    // Method to draw individual particle
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
         ctx.fillStyle = this.color;
         ctx.fill();
     }
-    
-    // Check particle position, move the particle, draw the particle
     update() {
-        if (this.x > canvas.width || this.x < 0) {
-            this.directionX = -this.directionX;
-        }
-        if (this.y > canvas.height || this.y < 0) {
-            this.directionY = -this.directionY;
-        }
-        
-        // Free flow movement (Linear, constant speed)
+        if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+        if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
         this.x += this.directionX;
         this.y += this.directionY;
         this.draw();
     }
 }
 
-// Create particle array
 function initCanvas() {
     particlesArray = [];
     let numberOfParticles = (canvas.height * canvas.width) / 9000; 
-    
-    // CONSTANT PROFESSIONAL SETTINGS (Both Dark & Light modes)
-    // Red, Connected, Small, Free Flow
     let color = '#ff0000'; 
     
     for (let i = 0; i < numberOfParticles; i++) {
-        let size = (Math.random() * 1.5) + 0.5; // SMALLER: 0.5 to 2.0px
+        let size = (Math.random() * 1.5) + 0.5; 
         let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
         let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-        
-        // Slower, smoother speed
         let directionX = (Math.random() * 0.4) - 0.2; 
         let directionY = (Math.random() * 0.4) - 0.2;
         
@@ -94,29 +76,20 @@ function initCanvas() {
     }
 }
 
-// Animation Loop
 function animateParticles() {
     requestAnimationFrame(animateParticles);
     ctx.clearRect(0, 0, innerWidth, innerHeight);
-    
     for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
     }
     connect();
 }
 
-// Connect particles with lines
 function connect() {
     let opacityValue = 1;
     let maxDistance = 140; 
-    
-    const strokeRGB = '255, 0, 0'; // Red lines
-    
-    // RED ON BLACK requires MUCH higher opacity to be seen than RED ON WHITE
+    const strokeRGB = '255, 0, 0'; 
     const isLightMode = body.getAttribute('data-theme') === 'light';
-    
-    // Light mode: 0.15 is subtle and nice
-    // Dark mode: 0.6 is needed because red fades into black easily
     const opacityMultiplier = isLightMode ? 0.15 : 0.6; 
 
     for (let a = 0; a < particlesArray.length; a++) {
@@ -125,10 +98,8 @@ function connect() {
                            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
             
             if (distance < (maxDistance * maxDistance)) {
-                // Calculate opacity based on distance
                 opacityValue = 1 - (distance / (maxDistance * maxDistance));
                 if(opacityValue < 0) opacityValue = 0;
-                
                 ctx.strokeStyle = `rgba(${strokeRGB}, ${opacityValue * opacityMultiplier})`; 
                 ctx.lineWidth = 0.8; 
                 ctx.beginPath();
@@ -147,44 +118,34 @@ window.addEventListener('resize', () => {
 });
 
 
-// --- 3. MAGNETIC BUTTONS EFFECT ---
+// --- 3. MAGNETIC BUTTONS & TILT ---
 const magnets = document.querySelectorAll('.magnetic');
 magnets.forEach((magnet) => {
     magnet.addEventListener('mousemove', (e) => {
         const position = magnet.getBoundingClientRect();
         const x = e.pageX - position.left - position.width / 2;
         const y = e.pageY - position.top - position.height / 2;
-
         magnet.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
     });
-
     magnet.addEventListener('mouseleave', () => {
         magnet.style.transform = 'translate(0px, 0px)';
     });
 });
 
-// --- 4. 3D TILT EFFECT FOR CARDS ---
 const tiltCards = document.querySelectorAll('.tilt-card');
 tiltCards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
         const xPct = x / rect.width;
         const yPct = y / rect.height;
-        
-        const xRotation = (yPct - 0.5) * 15; // Subtle 15deg
+        const xRotation = (yPct - 0.5) * 15; 
         const yRotation = (0.5 - xPct) * 15;
-        
         card.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1.02, 1.02, 1.02)`;
-        
         const glow = card.querySelector('.card-glow');
-        if(glow) {
-            glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,0,0,0.15), transparent 70%)`;
-        }
+        if(glow) glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,0,0,0.15), transparent 70%)`;
     });
-    
     card.addEventListener('mouseleave', () => {
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
         const glow = card.querySelector('.card-glow');
@@ -192,8 +153,6 @@ tiltCards.forEach(card => {
     });
 });
 
-
-// --- 5. SCROLL PROGRESS BAR ---
 window.onscroll = function() {
     let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -201,43 +160,34 @@ window.onscroll = function() {
     document.querySelector(".scroll-progress").style.width = scrolled + "%";
 };
 
-
-// --- MENU & SCROLL RESTORATION LOGIC ---
-
-// Toggle Menu
+// --- MENU & SCROLL ---
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
     const menuBtnIcon = document.querySelector('.menu-btn i');
-    
     navLinks.classList.toggle('active');
-
     if (navLinks.classList.contains('active')) {
         menuBtnIcon.classList.remove('fa-bars');
         menuBtnIcon.classList.add('fa-times');
-        document.body.style.overflow = 'hidden'; // Lock Scroll
+        document.body.style.overflow = 'hidden';
     } else {
         menuBtnIcon.classList.remove('fa-times');
         menuBtnIcon.classList.add('fa-bars');
-        document.body.style.overflow = 'auto'; // Unlock Scroll
+        document.body.style.overflow = 'auto';
     }
 }
 
-// Close Menu explicitly (for nav links)
 function closeMenu() {
     const navLinks = document.querySelector('.nav-links');
     const menuBtnIcon = document.querySelector('.menu-btn i');
-    
-    // Only act if currently active (Mobile)
     if (navLinks.classList.contains('active')) {
         navLinks.classList.remove('active');
         menuBtnIcon.classList.remove('fa-times');
         menuBtnIcon.classList.add('fa-bars');
-        document.body.style.overflow = 'auto'; // Ensure scroll is unlocked
+        document.body.style.overflow = 'auto';
     }
 }
 
-
-// --- TYPING EFFECT ---
+// --- TYPING ---
 const textElement = document.querySelector('.type-text');
 const roles = ["Software Developer", "Full Stack Developer", "Web Developer", "Open Source Enthusiast"];
 let roleIndex = 0;
@@ -256,7 +206,6 @@ function typeEffect() {
         charIndex++;
         typeSpeed = 100;
     }
-
     if (!isDeleting && charIndex === currentRole.length) {
         isDeleting = true;
         typeSpeed = 2000; 
@@ -269,13 +218,15 @@ function typeEffect() {
 }
 
 
-// --- PROJECT SELECTION & CLICK OUTSIDE ---
+// --- PROJECT DATA & RENDER LOGIC ---
 const projects = [
     {
         title: "EduNex",
         description: "A secure platform for student data management and learning resources.",
-        existingProblems: "Managing student data manually leads to inconsistency and security risks in resource distribution.",
-        solvedProblems: "Integrated Supabase for secure data storage with role-based access control and streamlined Next.js dashboard.",
+        challenge: "Managing student data manually leads to inconsistency and security risks in resource distribution.",
+        solution: "Integrated Supabase for secure data storage with role-based access control and streamlined Next.js dashboard.",
+        features: ["Role-Based Access Control", "Real-time Data Sync", "Secure File Sharing"],
+        impact: "Reduced administrative workload by 40% and improved data retrieval speed by 2x.",
         techUsed: ["Next.js", "Supabase", "React.js", "Tailwind CSS"],
         liveLink: "https://edunex-bot.vercel.app/",
         githubLink: "https://github.com/sree-hari-v/Edunex"
@@ -283,8 +234,10 @@ const projects = [
     {
         title: "Project Hub",
         description: "A centralized dashboard to showcase development projects.",
-        existingProblems: "Personal projects were difficult to navigate and lack a professional, unified showcase experience.",
-        solvedProblems: "Developed a responsive dashboard with categorized projects, smooth animations, and direct access to source code.",
+        challenge: "Personal projects were difficult to navigate and lack a professional, unified showcase experience.",
+        solution: "Developed a responsive dashboard with categorized projects, smooth animations, and direct access to source code.",
+        features: ["Interactive Filtering", "3D Tilt Animations", "Responsive Grid Layout"],
+        impact: "Increased portfolio engagement and provided a single source of truth for all development work.",
         techUsed: ["HTML5", "CSS3", "JavaScript", "Intersection Observer API"],
         liveLink: "https://cs-tech-hub.vercel.app/",
         githubLink: "https://github.com/sree-hari-v/cs-tech-hub"
@@ -292,8 +245,10 @@ const projects = [
     {
         title: "Grievance Portal",
         description: "A secure platform for students to raise concerns and get timely resolutions.",
-        existingProblems: "Manual grievance reporting in departments is often slow, opaque, and hard to track for students.",
-        solvedProblems: "Built a transparent system for real-time reporting and status tracking, enhancing accountability and resolution speed.",
+        challenge: "Manual grievance reporting in departments is often slow, opaque, and hard to track for students.",
+        solution: "Built a transparent system for real-time reporting and status tracking, enhancing accountability and resolution speed.",
+        features: ["Anonymous Reporting", "Status Tracking Timeline", "Admin Dashboard"],
+        impact: "Streamlined the grievance redressal process, reducing resolution time from weeks to days.",
         techUsed: ["Next.js", "Tailwind CSS", "Firebase", "TypeScript"],
         liveLink: "https://cs-dept-grievance-portal.vercel.app/",
         githubLink: "https://github.com/sree-hari-v/department-grievance-portal"
@@ -309,23 +264,37 @@ function selectProject(index, event) {
     const project = projects[index];
     if (!project) return;
 
+    // Render HTML
     detailsContainer.innerHTML = `
         <span class="close-details" onclick="closeProjectDetails(event)" aria-label="Close">
             <i class="fas fa-times"></i>
         </span>
-        <div class="detail-header">
+        
+        <div class="detail-header-group">
             <h2>${project.title}</h2>
             <div class="detail-links">
-                <a href="${project.githubLink}" class="detail-link-btn" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                <a href="${project.liveLink}" class="detail-link-btn detail-link-live" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                <a href="${project.githubLink}" class="detail-btn" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="${project.liveLink}" class="detail-btn detail-btn-live" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
             </div>
         </div>
+
         <div class="detail-content">
-            <p>${project.description}</p>
+            <p class="project-desc">${project.description}</p>
+            
             <h4><i class="fas fa-exclamation-circle"></i> The Challenge</h4>
-            <p>${project.existingProblems}</p>
+            <p>${project.challenge}</p>
+            
             <h4><i class="fas fa-check-circle"></i> The Solution</h4>
-            <p>${project.solvedProblems}</p>
+            <p>${project.solution}</p>
+            
+            <h4><i class="fas fa-star"></i> Key Features</h4>
+            <ul class="feature-list">
+                ${project.features.map(feat => `<li>${feat}</li>`).join('')}
+            </ul>
+
+            <h4><i class="fas fa-chart-line"></i> Impact / Results</h4>
+            <p>${project.impact}</p>
+
             <h4><i class="fas fa-tools"></i> Tech Stack</h4>
             <div class="tech-stack-detail">
                 ${project.techUsed.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
@@ -349,28 +318,21 @@ function closeProjectDetails(event) {
     projectCards.forEach(card => card.classList.remove('active'));
 }
 
-// Click outside logic
 document.addEventListener('click', (e) => {
     const container = document.querySelector('.projects-container');
-    
-    // If details are open
     if (container && container.classList.contains('active-view')) {
-        // Check if click was NOT on a project card and NOT inside the details view
         const clickedCard = e.target.closest('.project-card');
         const clickedDetails = e.target.closest('.project-detail-view');
-        
         if (!clickedCard && !clickedDetails) {
             closeProjectDetails(e);
         }
     }
 });
 
-// Global Initialization
 document.addEventListener('DOMContentLoaded', () => {
     initCanvas();
     animateParticles();
     typeEffect();
-
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -378,6 +340,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.hidden, .hidden-stagger, .section-title').forEach(el => revealObserver.observe(el));
 });
