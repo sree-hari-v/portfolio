@@ -1326,6 +1326,12 @@ section:not(.cin-stage)::before {
   color: #fff;
 }
 
+[data-theme="light"] .exp-card:hover h3,
+[data-theme="light"] .project-card:hover h3 {
+  color: #1a1a1a;
+  text-shadow: none;
+}
+
 .exp-card:active,
 .project-card:active {
   transform: translateY(-6px) scale(0.995);
