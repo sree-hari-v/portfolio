@@ -1,297 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sreehari V | Portfolio</title>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%230f0f0f'/><text x='50%' y='50%' dy='.35em' text-anchor='middle' fill='%23ff0000' font-family='sans-serif' font-weight='bold' font-size='45'>S</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sreehari V | Portfolio</title>
+  <link rel="icon" type="image/png"
+    href="https://ui-avatars.com/api/?name=S&background=111111&color=E84545&rounded=true&bold=true&size=256&font-size=0.7" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@400;600&family=Bebas+Neue&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <link rel="stylesheet" href="style.css?v=20260604" />
 </head>
-<body>
-<div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
-    <div id="preloader">
-        <div class="preloader-content">
-            <div class="logo-box">
-                <span class="logo-letter">S</span>
-            </div>
-            <div class="loading-title">SYSTEM INITIALIZING</div>
-            <div class="loading-bar-wrapper">
-                <div class="loading-bar"></div>
-            </div>
-            <div class="loading-status">
-                <span class="status-text" id="status-text">Booting core assets...</span>
-                <span class="status-percent" id="status-percent">0%</span>
-            </div>
-        </div>
+
+<body class="hint scroll-locked" data-theme="dark">
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+
+  <canvas id="canvas-bg"></canvas>
+  <div class="scroll-progress"></div>
+
+  <section class="cin-stage" id="cinStage" aria-label="Cinematic Stage">
+    <div class="cin-vignette"></div>
+
+    <div class="rope-zone" id="ropeZone" aria-label="Pull the rope">
+      <div class="rope" id="rope"></div>
+      <div class="pull-hint" id="pullHint">PULL</div>
+      <button class="rope-click" id="ropeClick" type="button">CLICK HERE</button>
     </div>
 
-    <div class="scroll-progress"></div>
+    <div class="cin-center">
+      <div class="cin-center-inner">
+        <h1 class="cin-name" id="cinName">SREEHARI V</h1>
 
-    <canvas id="canvas-bg"></canvas>
+        <div class="cin-pages-wrapper">
+          <div class="cin-page cin-page-1">
+            <nav class="cin-links" id="cinLinks" aria-label="Landing links">
+              <a href="https://drive.google.com/file/d/1o1KKzYHzRdbiPagUZu1ik9rLi5ewDoie/view?usp=drive_link"
+                target="_blank" rel="noreferrer">Resume</a>
+              <a href="https://github.com/sree-hari-v" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/sreehari-v-a15084321/" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href="mailto:sreehari.vengalil@gmail.com">Mail</a>
+            </nav>
+          </div>
 
-    <nav>
-        <div class="logo">
-            <a href="#home">Sreehari <span>V</span></a>
-        </div>
-        
-        <div class="nav-right-mobile">
-            <div class="menu-btn magnetic" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
+          <div class="cin-page cin-page-2">
+            <div class="cin-summary" id="cinSummary" aria-label="Summary">
+              I am a&nbsp;<span class="cin-type" id="cinType"></span><span class="cin-type-cursor"
+                aria-hidden="true">&nbsp;</span>
             </div>
-        </div>
 
-        <ul class="nav-links">
-            <li><a href="#home" onclick="closeMenu()" class="magnetic">Home</a></li>
-            <li><a href="#about" onclick="closeMenu()" class="magnetic">About</a></li>
-            <li><a href="#skills" onclick="closeMenu()" class="magnetic">Skills</a></li>
-            <li><a href="#experience" onclick="closeMenu()" class="magnetic">Experience</a></li>
-            <li><a href="#timeline" onclick="closeMenu()" class="magnetic">Timeline</a></li>
-            <li><a href="#projects" onclick="closeMenu()" class="magnetic">Projects</a></li>
-            <li><a href="#contact" onclick="closeMenu()" class="magnetic">Contact</a></li>
-            <li>
-                <a href="https://drive.google.com/file/d/1o1KKzYHzRdbiPagUZu1ik9rLi5ewDoie/view?usp=drive_link" target="_blank" class="nav-resume magnetic">Resume</a>
-            </li>
-            <li class="theme-li">
-                <button id="theme-toggle" aria-label="Toggle Dark Mode" class="magnetic-stable">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </li>
-        </ul>
-    </nav>
-
-    <section id="home" class="hero">
-        <div class="hero-content fade-in-up">
-            <p class="hello-tag">&lt;Hello /&gt;, my name is</p>
-            <h1 class="slide-in-text">Sreehari V</h1>
-            <div class="typing-container">
-                I am a&nbsp;<span class="type-text"></span><span class="cursor">&nbsp;</span>
-            </div>
-            <p class="hero-desc">
-                Full-Stack Developer and Computer Science undergraduate building scalable web applications and robust software systems. I design responsive front-end experiences, architect secure back-end services, and write clean, performance-driven code that delivers real-world impact.
-            </p>
-            
-            <div class="hero-actions">
-                <a href="https://drive.google.com/file/d/1o1KKzYHzRdbiPagUZu1ik9rLi5ewDoie/view?usp=drive_link" target="_blank" class="btn-hero-resume magnetic-btn">
-                    <span>Resume</span>
-                </a>
-                
-                <div class="social-icons">
-                    <a href="https://github.com/sree-hari-v" target="_blank" class="social-icon magnetic"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/sreehari-v-a15084321/" target="_blank" class="social-icon magnetic"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="mailto:sreehari.vengalil@gmail.com" class="social-icon magnetic"><i class="fas fa-envelope"></i></a>
-                </div>
-            </div>
+            <nav class="cin-nav" id="cinNav" aria-label="Second page navigation">
+              <a href="#about">About</a>
+              <a href="#skills">Tech</a>
+              <a href="#experience">Experience</a>
+              <a href="#timeline">Timeline</a>
+              <a href="#contact">Contact</a>
+            </nav>
+          </div>
         </div>
 
-        <div class="hero-img-container fade-in-scale magnetic">
-            <div class="img-wrapper floating-anim">
-                <img src="https://github.com/sree-hari-v.png" alt="Sreehari V" class="profile-pic">
-            </div>
+        <button class="cin-cta" id="cinCta" type="button">CLICK HERE</button>
+      </div>
+    </div>
+
+    <div class="cin-bottom-hint" id="cinBottomHint">PULL TO TURN ON</div>
+
+    <div class="accent-picker" id="accentPicker" aria-label="Accent color picker">
+      <button class="stage-theme-toggle" id="theme-toggle-stage" type="button" aria-label="Toggle Light Mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="accent-dot" data-accent="#E84545" data-rgb="232 69 69" title="Red" aria-label="Red"></button>
+      <button class="accent-dot" id="wb-dot" data-accent="#FFFFFF" data-rgb="255 255 255" title="White"
+        aria-label="White"></button>
+      <button class="accent-dot" data-accent="#4D7CFF" data-rgb="77 124 255" title="Blue" aria-label="Blue"></button>
+      <button class="accent-dot" data-accent="#9B6BFF" data-rgb="155 107 255" title="Purple"
+        aria-label="Purple"></button>
+      <button class="accent-dot" data-accent="#D6B35A" data-rgb="214 179 90" title="Gold" aria-label="Gold"></button>
+    </div>
+
+    <div class="cin-flicker" id="cinFlicker"></div>
+    <div class="cin-scanlines" id="cinScanlines"></div>
+    <div class="cin-jitter" id="cinJitter"></div>
+  </section>
+
+  <nav class="site-nav">
+    <div class="logo">
+      <a href="#top">Sreehari <span>V</span></a>
+    </div>
+
+    <div class="nav-right-mobile">
+      <button class="menu-btn" id="menu-btn" aria-label="Open menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <ul class="nav-links" id="nav-links">
+      <li class="menu-close-li">
+        <button class="menu-close-btn" id="menu-close-btn" aria-label="Close menu">
+          <i class="fas fa-times"></i>
+        </button>
+      </li>
+
+      <li><a href="#top">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Tech</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#contact">Contact</a></li>
+
+      <li class="theme-li">
+        <button id="theme-toggle-nav" aria-label="Toggle Light Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
+
+  <div id="top" class="cin-scroll-space" aria-hidden="true"></div>
+
+  <section id="about">
+    <h2 class="section-title reveal">About <span>Me</span></h2>
+
+    <div class="about-split reveal delay-1">
+      <div class="about-text">
+        <p style="margin-bottom: 18px;">
+          I am Sreehari, a <strong style="color: var(--primary)">Computer Science Undergraduate and Full-Stack
+            Developer</strong>
+          passionate about building scalable web applications and robust software systems.
+          I enjoy transforming complex problems into clean, efficient, and performance-driven solutions, with a strong
+          focus on writing maintainable code and designing systems that are both user-centric and technically sound.
+        </p>
+        <p>
+          From architecting secure data platforms like <em>EduNex</em> to developing responsive front-end interfaces and
+          structured back-end services,
+          I take ownership of the entire development lifecycle — from concept to deployment.
+          I continuously refine my skills in modern web technologies, API design, authentication systems, and scalable
+          architectures to build reliable, secure, and future-ready digital products.
+        </p>
+      </div>
+
+      <div class="about-frame" aria-label="Profile picture">
+        <img src="https://github.com/sree-hari-v.png" alt="Sreehari V" class="about-pic" />
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2 class="section-title reveal">My <span>Tech Arsenal</span></h2>
+    <div class="skills-grid reveal delay-2">
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=java" alt="Java">
+        <p>Java</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=python" alt="Python">
+        <p>Python</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=cpp" alt="C++">
+        <p>C++</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=js" alt="JavaScript">
+        <p>JavaScript</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=html" alt="HTML5">
+        <p>HTML5</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=react" alt="React.js">
+        <p>React.js</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=nextjs" alt="Next.js">
+        <p>Next.js</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind">
+        <p>Tailwind</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=nodejs" alt="Node.js">
+        <p>Node.js</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB">
+        <p>MongoDB</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=supabase" alt="Supabase">
+        <p>Supabase</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=firebase" alt="Firebase">
+        <p>Firebase</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=git" alt="Git">
+        <p>Git</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=github" alt="GitHub">
+        <p>GitHub</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=postman" alt="Postman">
+        <p>Postman</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=linux" alt="Linux">
+        <p>Linux</p>
+      </div>
+      <div class="skill-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg"
+          alt="Salesforce" style="background:white; padding:2px; border-radius:10px;">
+        <p>Salesforce</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=vscode" alt="VS Code">
+        <p>VS Code</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=pycharm" alt="PyCharm">
+        <p>PyCharm</p>
+      </div>
+      <div class="skill-item"><img
+          src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Microsoft_365_%282022%29.svg" alt="MS Office"
+          style="background:white; padding:2px; border-radius:10px;">
+        <p>MS Office</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=webstorm" alt="WebStorm">
+        <p>WebStorm</p>
+      </div>
+      <div class="skill-item"><img src="https://skillicons.dev/icons?i=androidstudio" alt="Android Studio">
+        <p>Android Studio</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2 class="section-title reveal">Professional <span>Experience</span></h2>
+
+    <div class="experience-container reveal delay-2" id="experience-container">
+      <div class="experience-list" id="experience-list">
+        <div class="exp-card tilt-card" onclick="selectExperience(0, event)">
+          <div class="card-header">
+            <i class="fas fa-laptop-code folder-icon"></i>
+            <i class="fas fa-arrow-right expand-icon"></i>
+          </div>
+          <h3>Lab Technician Intern</h3>
+          <p>Assisted in managing lab infrastructure, troubleshooting, and technical support.</p>
+          <div class="card-footer-links">
+            <span class="exp-mini-date">Jun 2025 - Nov 2025</span>
+          </div>
         </div>
-    </section>
 
-    <section id="about">
-        <h2 class="section-title reveal">About <span>Me</span></h2>
-        <div class="about-content reveal delay-1" style="max-width: 800px; margin: 0 auto; text-align: center; color: var(--text-gray); line-height: 1.8;">
-           <p style="margin-bottom: 20px;">
-                I am Sreehari, a <strong style="color: var(--primary)">Computer Science Undergraduate and Full-Stack Developer</strong> passionate about building scalable web applications and robust software systems. I enjoy transforming complex problems into clean, efficient, and performance-driven solutions, with a strong focus on writing maintainable code and designing systems that are both user-centric and technically sound.
-            </p>
-            <p>
-                From architecting secure data platforms like <em>EduNex</em> to developing responsive front-end interfaces and structured back-end services, I take ownership of the entire development lifecycle — from concept to deployment. I continuously refine my skills in modern web technologies, API design, authentication systems, and scalable architectures to build reliable, secure, and future-ready digital products.
-            </p>
+        <div class="exp-card tilt-card" onclick="selectExperience(1, event)">
+          <div class="card-header">
+            <i class="fas fa-book folder-icon"></i>
+            <i class="fas fa-arrow-right expand-icon"></i>
+          </div>
+          <h3>Computing Fundamentals and C Programming</h3>
+          <p>Co-authored a guide on C programming, memory management, and practice examples.</p>
+          <div class="card-footer-links">
+            <span class="exp-mini-date">Published Jan 2025</span>
+          </div>
         </div>
-    </section>
 
-    <section id="skills">
-        <h2 class="section-title reveal">My <span>Tech Arsenal</span></h2>
-        <div class="skills-grid reveal delay-2">
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=java" alt="Java"><p>Java</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=python" alt="Python"><p>Python</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=cpp" alt="C++"><p>C++</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=js" alt="JavaScript"><p>JavaScript</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=html" alt="HTML5"><p>HTML5</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=react" alt="React.js"><p>React.js</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=nextjs" alt="Next.js"><p>Next.js</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind"><p>Tailwind</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=nodejs" alt="Node.js"><p>Node.js</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB"><p>MongoDB</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=supabase" alt="Supabase"><p>Supabase</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=firebase" alt="Firebase"><p>Firebase</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=git" alt="Git"><p>Git</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=github" alt="GitHub"><p>GitHub</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=postman" alt="Postman"><p>Postman</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=linux" alt="Linux"><p>Linux</p></div>
-            <div class="skill-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg" alt="Salesforce" style="background:white; padding:2px; border-radius:10px;"><p>Salesforce</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=vscode" alt="VS Code"><p>VS Code</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=pycharm" alt="PyCharm"><p>PyCharm</p></div>
-            <div class="skill-item"><img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Microsoft_365_%282022%29.svg" alt="MS Office" style="background:white; padding:2px; border-radius:10px;"><p>MS Office</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=webstorm" alt="WebStorm"><p>WebStorm</p></div>
-            <div class="skill-item"><img src="https://skillicons.dev/icons?i=androidstudio" alt="Android Studio"><p>Android Studio</p></div>
+        <div class="exp-card tilt-card" onclick="selectExperience(2, event)">
+          <div class="card-header">
+            <i class="fas fa-book folder-icon"></i>
+            <i class="fas fa-arrow-right expand-icon"></i>
+          </div>
+          <h3>Essentials Of Java</h3>
+          <p>Co-authored a Java/OOP textbook including DS, multithreading, and application design.</p>
+          <div class="card-footer-links">
+            <span class="exp-mini-date">Published Jan 2025</span>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <section id="experience">
-        <h2 class="section-title reveal">Professional <span>Experience</span></h2>
-        <div class="experience-container">
-            
-            <div class="exp-card reveal slide-right tilt-card">
-                <div class="exp-icon"><i class="fas fa-laptop-code"></i></div>
-                <div class="exp-details">
-                    <span class="exp-date">Jun 2025 - Nov 2025</span>
-                    <h3>Lab Technician Intern</h3>
-                    <h4 class="exp-company">Nilgiri College of Arts and Science</h4>
-                    <p>Assisted in managing computer lab infrastructure, troubleshooting hardware and software issues, and providing technical support to students and faculty, ensuring smooth daily operations.</p>
-                </div>
-            </div>
+      <div class="experience-detail-view" id="experience-details"></div>
+    </div>
+  </section>
 
-            <div class="exp-card reveal slide-left tilt-card">
-                <div class="exp-icon"><i class="fas fa-book"></i></div>
-                <div class="exp-details">
-                    <span class="exp-date">Published Jan 2025</span>
-                    <h3>Title: Computing Fundamentals and C Programming </h3>
-                    <h4 class="exp-company">Role: Co-Author</h4>
-                    <h4 class="exp-company">ISBN: 978-93-344-4926-6</h4>
-                    <p>Co-authored a comprehensive guide on C programming, covering core concepts, memory management, and practical examples aimed at helping college students build strong foundational knowledge.</p>
-                </div>
-            </div>
-
-            <div class="exp-card reveal slide-left tilt-card">
-                <div class="exp-icon"><i class="fas fa-book"></i></div>
-                <div class="exp-details">
-                    <span class="exp-date">Published Jan 2025</span>
-                    <h3>Title: Essentials Of Java</h3>
-                    <h4 class="exp-company">Role: Co-Author</h4>
-                    <h4 class="exp-company">ISBN: 978-93-344-4677-7</h4>
-                    <p>Collaborated on a detailed textbook exploring Object-Oriented Programming principles in Java, including data structures, multithreading, and real-world application design.</p>
-                </div>
-            </div>
-
+  <section id="projects">
+    <h2 class="section-title reveal">Featured <span>Projects</span></h2>
+    <div class="projects-container reveal delay-2" id="projects-container">
+      <div class="project-list" id="project-list">
+        <div class="project-card tilt-card" onclick="selectProject(0, event)">
+          <div class="card-header">
+            <i class="far fa-folder folder-icon"></i>
+            <i class="fas fa-arrow-right expand-icon"></i>
+          </div>
+          <h3>EduNex</h3>
+          <p>Built a secure, AI-driven college chatbot to automate campus inquiries and assist students.</p>
+          <div class="card-footer-links">
+            <a href="https://github.com/sree-hari-v/Edunex" class="card-link-btn" target="_blank"
+              rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fab fa-github"></i> GitHub</a>
+            <a href="https://edunex-bot.vercel.app/" class="card-link-btn card-link-live" target="_blank"
+              rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i>
+              Live</a>
+          </div>
         </div>
-    </section>
 
-    <section id="timeline">
-        <h2 class="section-title reveal">My <span>Journey</span></h2>
-        <div class="timeline-container">
-            
-            <div class="timeline-item reveal slide-right">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content tilt-card">
-                    <span class="time-date">2021 - 2023</span>
-                    <h3>High School Education</h3>
-                    <p>Completed Higher Secondary under Tamil Nadu State Board with a strong focus on Mathematics and Computer Science.</p>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal slide-left">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content tilt-card">
-                    <span class="time-date">2023 - 2026</span>
-                    <h3>College Journey Begins</h3>
-                    <p>Started B.Sc. Computer Science at Nilgiri College of Arts and Science. Began deeply exploring data structures, algorithms, and software engineering principles.</p>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal slide-right">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content tilt-card">
-                    <span class="time-date">Mid 2024</span>
-                    <h3>Language & Tech Mastery</h3>
-                    <p>Mastered modern JavaScript, React.js, and backend technologies like Node.js and Supabase. Began building complex full-stack architectural prototypes.</p>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal slide-left">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content tilt-card">
-                    <span class="time-date">Late 2025</span>
-                    <h3>Major Projects Launch</h3>
-                    <p>Architected and deployed "EduNex" (AI Chatbot) and multiple department-level applications, gaining hands-on experience with production-level code.</p>
-                </div>
-            </div>
-
-            <div class="timeline-item reveal slide-right">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content tilt-card">
-                    <span class="time-date">2025 - Present</span>
-                    <h3>Internships & Publications</h3>
-                    <p>Stepped into the professional world through software internships and published technical writing, bridging the gap between academia and industry.</p>
-                </div>
-            </div>
-
+        <div class="project-card tilt-card" onclick="selectProject(1, event)">
+          <div class="card-header">
+            <i class="far fa-folder folder-icon"></i>
+            <i class="fas fa-arrow-right expand-icon"></i>
+          </div>
+          <h3>Project Hub</h3>
+          <p>A centralized dashboard to showcase development projects.</p>
+          <div class="card-footer-links">
+            <a href="https://github.com/sree-hari-v/cs-tech-hub" class="card-link-btn" target="_blank"
+              rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fab fa-github"></i> GitHub</a>
+            <a href="https://cs-tech-hub.vercel.app/" class="card-link-btn card-link-live" target="_blank"
+              rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i>
+              Live</a>
+          </div>
         </div>
-    </section>
 
-    <section id="projects">
-        <h2 class="section-title reveal">Featured <span>Projects</span></h2>
-        <div class="projects-container reveal delay-2" id="projects-container">
-            <div class="project-list" id="project-list">
-                <div class="project-card tilt-card" onclick="selectProject(0, event)">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <i class="far fa-folder folder-icon"></i>
-                        <i class="fas fa-arrow-right expand-icon"></i>
-                    </div>
-                    <h3>EduNex</h3>
-                    <p>Built a secure, AI-driven college chatbot to automate campus inquiries and assist students.</p>
-                    <div class="card-footer-links">
-                        <a href="https://github.com/sree-hari-v/Edunex" class="card-link-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://edunex-bot.vercel.app/" class="card-link-btn card-link-live" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i> Live</a>
-                    </div>
-                </div>
-
-                <div class="project-card tilt-card" onclick="selectProject(1, event)">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <i class="far fa-folder folder-icon"></i>
-                        <i class="fas fa-arrow-right expand-icon"></i>
-                    </div>
-                    <h3>Project Hub</h3>
-                    <p>A centralized dashboard to showcase development projects.</p>
-                    <div class="card-footer-links">
-                        <a href="https://github.com/sree-hari-v/cs-tech-hub" class="card-link-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://cs-tech-hub.vercel.app/" class="card-link-btn card-link-live" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i> Live</a>
-                    </div>
-                </div>
-
-                <div class="project-card tilt-card" onclick="selectProject(2, event)">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <i class="far fa-folder folder-icon"></i>
-                        <i class="fas fa-arrow-right expand-icon"></i>
-                    </div>
-                    <h3>Grievance Portal</h3>
-                    <p>A secure platform for students to raise concerns and get resolutions.</p>
-                    <div class="card-footer-links">
-                        <a href="https://github.com/sree-hari-v/department-grievance-portal" class="card-link-btn" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fab fa-github"></i> GitHub</a>
-                        <a href="https://cs-dept-grievance-portal.vercel.app/" class="card-link-btn card-link-live" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i> Live</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-detail-view" id="project-details"></div>
+        <div class="project-card tilt-card" onclick="selectProject(2, event)">
+          <div class="card-header">
+            <i class="far fa-folder folder-icon"></i>
+            <i class="fas fa-arrow-right expand-icon"></i>
+          </div>
+          <h3>Grievance Portal</h3>
+          <p>A secure platform for students to raise concerns and get timely resolutions.</p>
+          <div class="card-footer-links">
+            <a href="https://github.com/sree-hari-v/department-grievance-portal" class="card-link-btn" target="_blank"
+              rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fab fa-github"></i> GitHub</a>
+            <a href="https://cs-dept-grievance-portal.vercel.app/" class="card-link-btn card-link-live" target="_blank"
+              rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fas fa-external-link-alt"></i>
+              Live</a>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <section id="contact" style="min-height: 85vh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 50px;">
-        <div class="contact-container reveal zoom-in">
-            <h2 class="section-title" style="margin-bottom: 20px;">Get In <span>Touch</span></h2>
-            <p style="color: var(--text-gray); margin-bottom: 30px;">
-                I am currently open to new opportunities and collaborations. Whether you have a question about my stack, a project idea, or just want to connect, feel free to reach out!
-            </p>
-            <a href="mailto:sreehari.vengalil@gmail.com" class="email-btn magnetic-btn"><span>Say Hello</span></a>
+      <div class="project-detail-view" id="project-details"></div>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <h2 class="section-title reveal">My <span>Journey</span></h2>
+    <div class="timeline-container" id="timeline-container">
+      <div class="timeline-item reveal slide-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content tilt-card">
+          <span class="time-date">2021 - 2023</span>
+          <h3>High School Education</h3>
+          <p>Completed Higher Secondary under Tamil Nadu State Board with a strong focus on Mathematics and Computer
+            Science.</p>
         </div>
-    </section>
+      </div>
 
-    <footer style="text-align: center; padding: 20px; color: var(--text-gray); font-size: 0.8rem; margin-top: 50px;">
-        <p>Designed & Built by Sreehari V</p>
-    </footer>
+      <div class="timeline-item reveal slide-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content tilt-card">
+          <span class="time-date">2023 - 2026</span>
+          <h3>College Journey Begins</h3>
+          <p>Started B.Sc. Computer Science at Nilgiri College of Arts and Science. Began deeply exploring data
+            structures, algorithms, and software engineering principles.</p>
+        </div>
+      </div>
 
-    <script src="script.js"></script>
+      <div class="timeline-item reveal slide-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content tilt-card">
+          <span class="time-date">Mid 2024</span>
+          <h3>Language & Tech Mastery</h3>
+          <p>Mastered modern JavaScript, React.js, and backend technologies like Node.js and Supabase. Began building
+            complex full-stack architectural prototypes.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal slide-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content tilt-card">
+          <span class="time-date">Late 2025</span>
+          <h3>Major Projects Launch</h3>
+          <p>Architected and deployed "EduNex" (AI Chatbot) and multiple department-level applications, gaining hands-on
+            experience with production-level code.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal slide-right">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content tilt-card">
+          <span class="time-date">2025 - Present</span>
+          <h3>Internships & Publications</h3>
+          <p>Stepped into the professional world through software internships and published technical writing, bridging
+            the gap between academia and industry.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact"
+    style="min-height: 85vh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 50px;">
+    <div class="contact-container reveal zoom-in">
+      <h2 class="section-title" style="margin-bottom: 16px;">Keep In <span>Touch</span></h2>
+      <p style="color: var(--text-gray); margin-bottom: 26px;">
+        I am currently open to new opportunities and collaborations. Whether you have a question about my stack, a
+        project idea, or just want to connect, feel free to reach out!
+      </p>
+
+      <div class="contact-socials-big">
+        <a href="https://github.com/sree-hari-v" target="_blank" class="social-pill" rel="noreferrer">
+          <i class="fab fa-github"></i><span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/sreehari-v-a15084321/" target="_blank" class="social-pill"
+          rel="noreferrer">
+          <i class="fab fa-linkedin-in"></i><span>LinkedIn</span>
+        </a>
+        <a href="mailto:sreehari.vengalil@gmail.com" class="social-pill">
+          <i class="fas fa-envelope"></i><span>Mail</span>
+        </a>
+        <a href="https://drive.google.com/file/d/1o1KKzYHzRdbiPagUZu1ik9rLi5ewDoie/view?usp=drive_link" target="_blank"
+          class="social-pill" rel="noreferrer">
+          <i class="fa-solid fa-file-lines"></i><span>Resume</span>
+        </a>
+      </div>
+
+      <div class="contact-actions">
+        <a href="mailto:sreehari.vengalil@gmail.com" class="email-btn"><span>Say Hello</span></a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align: center; padding: 20px; color: var(--text-gray); font-size: 0.8rem; margin-top: 50px;">
+    <p>Designed & Built by Sreehari V</p>
+  </footer>
+
+  <!-- ============================
+       OFFLINE CHATBOT (UI)
+       ============================ -->
+  <button class="chat-fab" id="chatFab" type="button" aria-label="Open chat" title="Chat">
+    <i class="fa-solid fa-comment-dots"></i>
+  </button>
+
+  <aside class="chat-widget" id="chatWidget" aria-label="Offline chatbot" aria-hidden="true">
+    <header class="chat-header">
+      <button class="chat-brand" id="chatBrand" type="button" aria-label="Open/Close chat">
+        <div class="chat-title">
+          <div class="chat-avatar" id="chatAvatar" aria-hidden="true">B</div>
+          <div class="chat-title-text">
+            <div class="chat-name" id="chatBotName">Offline Bot</div>
+            <div class="chat-sub" id="chatBotSub">Set your bot name</div>
+          </div>
+        </div>
+      </button>
+
+      <button class="chat-close" id="chatClose" type="button" aria-label="Close chat" title="Close">
+        <i class="fas fa-times"></i>
+      </button>
+    </header>
+
+    <div class="chat-body" id="chatBody" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+    <div class="chat-chips" id="chatChips" aria-label="Chat suggestions">
+      <button type="button" class="chat-chip" data-msg="projects"><i class="fa-solid fa-folder-open"></i><span>Projects</span></button>
+      <button type="button" class="chat-chip" data-msg="skills"><i class="fa-solid fa-bolt"></i><span>Skills</span></button>
+      <button type="button" class="chat-chip" data-msg="resume link"><i class="fa-solid fa-file-lines"></i><span>Resume</span></button>
+      <button type="button" class="chat-chip" data-msg="contact"><i class="fa-solid fa-address-card"></i><span>Contact</span></button>
+    </div>
+
+    <form class="chat-input" id="chatForm" autocomplete="off">
+      <input id="chatText" type="text" inputmode="text" placeholder="Ask about projects, skills, resume, contact..."
+        aria-label="Chat message" />
+      <button id="chatSend" type="submit" aria-label="Send message" title="Send">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </form>
+  </aside>
+
+  <!-- IMPORTANT: answers engine must load BEFORE script.js -->
+  <script src="chatbot-answers.js?v=20260604"></script>
+  <script src="script.js?v=20260604"></script>
 </body>
+
 </html>
