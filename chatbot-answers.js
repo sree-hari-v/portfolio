@@ -53,6 +53,10 @@ window.ChatbotAnswers = (function () {
       keywords: ["bye", "goodbye", "see you", "cya", "exit"],
       answer: `Goodbye! Feel free to reach out to Sreehari via email or LinkedIn if you want to connect!`
     },
+    {
+      keywords: ["call me", "my name is", "i am", "i'm", "this is", "my name"],
+      answer: `Nice to meet you! Thanks for introducing yourself. I'm here to help you learn more about Sreehari's projects, skills, experience, and more. What would you like to know?`
+    },
 
     // ==========================================
     // 2. CONTACT & LINKS
