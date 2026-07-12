@@ -102,6 +102,10 @@ body.scroll-locked {
   height: 100vh;
 }
 
+body.modal-scroll-locked {
+  overflow: hidden;
+}
+
 /* Particles (hidden while stage visible) */
 #canvas-bg {
   position: fixed;
@@ -1627,6 +1631,243 @@ section:not(.cin-stage)::before {
   transform: translateY(-8px);
 }
 
+/* ==========================
+   CONTACT FORM CARD
+   ========================== */
+.contact-form-wrapper {
+  max-width: 620px;
+  margin: 24px auto 10px;
+  text-align: left;
+}
+
+.contact-form-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+  transition: border-color 0.35s var(--soft), box-shadow 0.35s var(--soft);
+}
+
+.contact-form-card:hover {
+  border-color: rgba(var(--glow-rgb) / 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 35px rgba(var(--glow-rgb) / 0.08);
+}
+
+.form-header h3 {
+  font-size: 1.45rem;
+  margin-bottom: 6px;
+  color: var(--text-white);
+}
+
+.form-header p {
+  font-size: 0.92rem;
+  color: var(--text-gray);
+  margin-bottom: 4px;
+}
+
+.form-group-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-gray);
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--primary);
+  font-size: 0.95rem;
+  pointer-events: none;
+  opacity: 0.8;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.textarea-icon .input-icon {
+  top: 16px;
+}
+
+#portfolio-form input[type="text"],
+#portfolio-form input[type="email"],
+#portfolio-form textarea {
+  width: 100%;
+  padding: 13px 14px 13px 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--glass-bg);
+  color: var(--text-white);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s var(--soft), box-shadow 0.3s var(--soft), background 0.3s var(--soft);
+}
+
+#portfolio-form input[type="text"]::placeholder,
+#portfolio-form input[type="email"]::placeholder,
+#portfolio-form textarea::placeholder {
+  color: var(--text-muted);
+}
+
+#portfolio-form input[type="text"]:focus,
+#portfolio-form input[type="email"]:focus,
+#portfolio-form textarea:focus {
+  border-color: var(--primary);
+  background: var(--glass-hover);
+  box-shadow: 0 0 0 4px rgba(var(--glow-rgb) / 0.15);
+}
+
+.form-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 28px;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--glow-rgb) / 0.35);
+  background: rgba(var(--glow-rgb) / 0.12);
+  color: var(--text-white);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 0.35s var(--soft), background 0.35s var(--soft), box-shadow 0.35s var(--soft), border-color 0.35s var(--soft);
+}
+
+.form-submit-btn:hover {
+  transform: translateY(-3px);
+  background: rgba(var(--glow-rgb) / 0.22);
+  border-color: rgba(var(--glow-rgb) / 0.6);
+  box-shadow: 0 12px 30px rgba(var(--glow-rgb) / 0.25);
+}
+
+.form-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+.form-status {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  min-height: 22px;
+  transition: opacity 0.3s ease;
+}
+
+.form-status.success {
+  color: #22c55e;
+}
+
+.form-status.error {
+  color: #ef4444;
+}
+
+.form-status.sending {
+  color: var(--primary);
+}
+
+@media (max-width: 600px) {
+  .contact-form-card {
+    padding: 22px 18px;
+  }
+  .form-group-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================
+   CONTACT MODAL POPUP
+   ========================== */
+.contact-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(5, 5, 5, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--soft);
+}
+
+.contact-modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.contact-modal-card {
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  transform: scale(0.88) translateY(24px);
+  opacity: 0;
+  transition: transform 0.4s var(--soft), opacity 0.4s var(--soft);
+}
+
+.contact-modal-backdrop.is-open .contact-modal-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.contact-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  color: var(--text-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--soft);
+}
+
+.contact-modal-close:hover {
+  background: rgba(var(--glow-rgb) / 0.22);
+  color: var(--text-white);
+  transform: scale(1.08) rotate(90deg);
+  border-color: var(--primary);
+}
+
+.contact-form-card.modal-form {
+  margin: 0;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.65), 0 0 45px rgba(var(--glow-rgb) / 0.15);
+  border-radius: 24px;
+  padding: 38px 32px 30px;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .nav-links {
@@ -1759,7 +2000,7 @@ section:not(.cin-stage)::before {
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
-  z-index: 999999;
+  z-index: 9999999;
   pointer-events: none;
 }
 
@@ -1772,7 +2013,7 @@ section:not(.cin-stage)::before {
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
-  z-index: 999998;
+  z-index: 9999998;
   pointer-events: none;
   transition: width .18s var(--soft), height .18s var(--soft), border-color .18s var(--soft), background .18s var(--soft);
 }
@@ -1912,11 +2153,6 @@ body.cursor-hover .cursor-outline {
   .rope-click,
   .rope-click:hover {
     transform: translateX(0);
-  }
-
-  .cursor-dot,
-  .cursor-outline {
-    display: none !important;
   }
 
   .site-nav {

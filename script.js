@@ -3,8 +3,9 @@
 // ============================
 // DEVICE DETECTION
 // ============================
-const isMobile = window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 768;
-const isDesktop = !isMobile;
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+const isMobile = isTouchDevice || window.innerWidth <= 768;
+const isDesktop = !isTouchDevice; // Enables custom mouse cursor & tilt animations on any desktop/laptop window
 const body = document.body;
 const DEFAULT_ACCENT = { hex: '#E84545', rgb: '232 69 69' };
 let currentAccent = { ...DEFAULT_ACCENT };
@@ -1084,4 +1085,82 @@ window.addEventListener('resize', () => {
 
   // set header immediately (even before open)
   setHeaderName(getUserName());
+})();
+
+// ============================
+// CONTACT MODAL POPUP & WEB3FORMS HANDLER
+// ============================
+(() => {
+  const openBtn = document.getElementById('open-contact-modal-btn');
+  const closeBtn = document.getElementById('closeContactModalBtn');
+  const backdrop = document.getElementById('contactModalBackdrop');
+  const form = document.getElementById('portfolio-form');
+  const statusText = document.getElementById('form-status');
+
+  function openContactModal() {
+    if (!backdrop) return;
+    backdrop.classList.add('is-open');
+    backdrop.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-scroll-locked');
+    setTimeout(() => {
+      const firstInput = form?.querySelector('input[type="text"]');
+      firstInput?.focus();
+    }, 150);
+  }
+
+  function closeContactModal() {
+    if (!backdrop) return;
+    backdrop.classList.remove('is-open');
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-scroll-locked');
+    if (statusText) {
+      statusText.innerHTML = '';
+      statusText.className = 'form-status';
+    }
+  }
+
+  openBtn?.addEventListener('click', openContactModal);
+  closeBtn?.addEventListener('click', closeContactModal);
+
+  backdrop?.addEventListener('pointerdown', (e) => {
+    if (e.target === backdrop) closeContactModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop?.classList.contains('is-open')) {
+      closeContactModal();
+    }
+  });
+
+  if (!form || !statusText) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    statusText.className = 'form-status sending';
+    statusText.innerHTML = 'Sending message...';
+
+    const formData = new FormData(form);
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          statusText.className = 'form-status success';
+          statusText.innerHTML = 'Message sent successfully!';
+          form.reset();
+          setTimeout(() => {
+            closeContactModal();
+          }, 2400);
+        } else {
+          statusText.className = 'form-status error';
+          statusText.innerHTML = 'Something went wrong. Please try again.';
+        }
+      })
+      .catch((error) => {
+        statusText.className = 'form-status error';
+        statusText.innerHTML = 'Error sending message. Please try again.';
+      });
+  });
 })();

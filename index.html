@@ -17,6 +17,11 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
   <link rel="stylesheet" href="style.css?v=20260604" />
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body class="hint scroll-locked" data-theme="dark">
@@ -413,11 +418,68 @@
         </a>
       </div>
 
-      <div class="contact-actions">
-        <a href="mailto:sreehari.vengalil@gmail.com" class="email-btn"><span>Say Hello</span></a>
+      <div class="contact-actions" style="margin-top: 28px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <button type="button" id="open-contact-modal-btn" class="email-btn" style="cursor: pointer;">
+          <span>Send Message</span>
+        </button>
       </div>
     </div>
   </section>
+
+  <!-- ============================
+       CONTACT FORM MODAL POPUP
+       ============================ -->
+  <div class="contact-modal-backdrop" id="contactModalBackdrop" aria-hidden="true">
+    <div class="contact-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="contact-modal-close" id="closeContactModalBtn" type="button" aria-label="Close modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <form id="portfolio-form" class="contact-form-card modal-form">
+        <!-- Web3Forms Access Key (Hidden) -->
+        <input type="hidden" name="access_key" value="bd479e84-4e8d-4fd8-808c-97fa08eeef98" />
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;" />
+
+        <div class="form-header">
+          <h3 id="modalTitle">Message Me</h3>
+          <p>Have a question or proposal? Send a direct message to my inbox.</p>
+        </div>
+
+        <div class="form-group-row">
+          <div class="form-group">
+            <label for="form-name">Name</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user input-icon"></i>
+              <input type="text" id="form-name" name="name" placeholder="Your Name" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-email">Email</label>
+            <div class="input-with-icon">
+              <i class="fas fa-envelope input-icon"></i>
+              <input type="email" id="form-email" name="email" placeholder="your@email.com" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-message">Message</label>
+          <div class="input-with-icon textarea-icon">
+            <i class="fas fa-comment-alt input-icon"></i>
+            <textarea id="form-message" name="message" rows="4" placeholder="How can I help you?" required></textarea>
+          </div>
+        </div>
+
+        <button type="submit" id="form-submit-btn" class="form-submit-btn">
+          <span>Send Message</span>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+
+        <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
 
   <footer style="text-align: center; padding: 20px; color: var(--text-gray); font-size: 0.8rem; margin-top: 50px;">
     <p>Designed & Built by Sreehari V</p>
@@ -465,7 +527,7 @@
     </form>
   </aside>
 
-  <!-- IMPORTANT: answers engine must load BEFORE script.js -->
+  
   <script src="chatbot-answers.js?v=20260604"></script>
   <script src="script.js?v=20260604"></script>
 </body>
