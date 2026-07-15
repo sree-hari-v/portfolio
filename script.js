@@ -3,9 +3,10 @@
 // ============================
 // DEVICE DETECTION
 // ============================
-const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-const isMobile = isTouchDevice || window.innerWidth <= 768;
-const isDesktop = !isTouchDevice; // Enables custom mouse cursor & tilt animations on any desktop/laptop window
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches && window.matchMedia("(hover: none)").matches;
+const isMobile = window.innerWidth <= 768 || isTouchDevice;
+const hasFinePointer = window.matchMedia("(any-pointer: fine)").matches || window.matchMedia("(pointer: fine)").matches || window.innerWidth > 768;
+const isDesktop = hasFinePointer && !isTouchDevice; // Enables custom mouse cursor & tilt animations on any desktop/laptop window
 const body = document.body;
 const DEFAULT_ACCENT = { hex: '#E84545', rgb: '232 69 69' };
 let currentAccent = { ...DEFAULT_ACCENT };
@@ -1136,6 +1137,17 @@ window.addEventListener('resize', () => {
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+
+    const nameVal = form.querySelector('#form-name')?.value.trim();
+    const emailVal = form.querySelector('#form-email')?.value.trim();
+    const messageVal = form.querySelector('#form-message')?.value.trim();
+
+    if (!nameVal || !emailVal || !messageVal) {
+      statusText.className = 'form-status error';
+      statusText.innerHTML = 'Please fill out all mandatory fields (Name, Email, Message).';
+      return;
+    }
+
     statusText.className = 'form-status sending';
     statusText.innerHTML = 'Sending message...';
 

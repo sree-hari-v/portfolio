@@ -1714,6 +1714,7 @@ section:not(.cin-stage)::before {
 
 #portfolio-form input[type="text"],
 #portfolio-form input[type="email"],
+#portfolio-form input[type="tel"],
 #portfolio-form textarea {
   width: 100%;
   padding: 13px 14px 13px 40px;
@@ -1729,12 +1730,14 @@ section:not(.cin-stage)::before {
 
 #portfolio-form input[type="text"]::placeholder,
 #portfolio-form input[type="email"]::placeholder,
+#portfolio-form input[type="tel"]::placeholder,
 #portfolio-form textarea::placeholder {
   color: var(--text-muted);
 }
 
 #portfolio-form input[type="text"]:focus,
 #portfolio-form input[type="email"]:focus,
+#portfolio-form input[type="tel"]:focus,
 #portfolio-form textarea:focus {
   border-color: var(--primary);
   background: var(--glass-hover);
@@ -2025,13 +2028,13 @@ body.cursor-hover .cursor-outline {
   border-color: rgba(var(--glow-rgb)/0.7);
 }
 
-@media (pointer: fine) {
+@media (pointer: fine), (any-pointer: fine) {
   body {
     cursor: none;
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (hover: none) {
   body {
     cursor: auto !important;
   }
