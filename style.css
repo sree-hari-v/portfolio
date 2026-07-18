@@ -825,32 +825,36 @@ body[data-theme="light"] .cin-jitter {
 /* Site nav */
 .site-nav {
   position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 18px 8%;
+  top: 24px;
+  left: 50%;
+  width: 92%;
+  max-width: 1000px;
+  padding: 12px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--nav-bg);
+  background: var(--card-bg);
   backdrop-filter: blur(15px);
   z-index: 1000;
-  border-bottom: 1px solid var(--border-color);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-10px);
-  box-shadow: 0 12px 34px rgba(0, 0, 0, .08);
-  transition: opacity 700ms var(--ease), transform 700ms var(--ease), padding .35s var(--soft), background .35s var(--soft);
+  transform: translate(-50%, -15px);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .15);
+  transition: opacity 700ms var(--ease), transform 700ms var(--ease), padding .35s var(--soft), background .35s var(--soft), width .35s var(--soft);
 }
 
 body.stage-hidden .site-nav {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translate(-50%, 0);
 }
 
 body.nav-compact .site-nav {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: var(--nav-bg);
 }
 
 /* Logo Gradient automatically adapts based on var text colors */
