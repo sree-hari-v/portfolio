@@ -262,7 +262,7 @@ body.home-header .rope-zone {
   left: clamp(18px, 4vw, 60px);
   width: 1.5px;
   height: min(62vh, 560px);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .55), rgba(255, 255, 255, .16));
+  background: linear-gradient(to bottom, #E84545, rgba(232, 69, 69, 0.2));
   border-radius: 2px;
   pointer-events: none;
 }
@@ -276,27 +276,30 @@ body.home-header .rope-zone {
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, .9), rgba(255, 255, 255, .25) 55%, rgba(255, 255, 255, 0) 100%);
+  background: radial-gradient(circle at 40% 30%, #E84545, rgba(232, 69, 69, 0.5) 55%, transparent 100%);
   opacity: .7;
 }
 
 /* Rope Light Mode */
 body[data-theme="light"] .rope {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, .40), rgba(0, 0, 0, .10));
+  background: linear-gradient(to bottom, #E84545, rgba(232, 69, 69, 0.6));
 }
 
 body[data-theme="light"] .rope::after {
-  background: radial-gradient(circle at 40% 30%, rgba(0, 0, 0, .7), rgba(0, 0, 0, .2) 55%, rgba(0, 0, 0, 0) 100%);
+  background: radial-gradient(circle at 40% 30%, #ff6b6b, #d93030 60%, transparent 100%);
+  opacity: 1;
 }
 
 .pull-hint {
   position: absolute;
   left: clamp(18px, 4vw, 60px);
   top: calc(min(62vh, 560px) + 18px);
+  transform: translateX(-50%);
   letter-spacing: .32em;
   text-transform: uppercase;
   font-size: 11px;
-  color: var(--text-muted);
+  font-weight: 600;
+  color: #E84545;
   opacity: 0;
   transition: opacity 700ms var(--ease), color 400ms ease;
   pointer-events: none;
@@ -306,47 +309,97 @@ body.hint .pull-hint {
   opacity: 1;
 }
 
+.or-hint {
+  position: absolute;
+  left: clamp(18px, 4vw, 60px);
+  top: calc(min(62vh, 560px) + 38px);
+  transform: translateX(-50%);
+  letter-spacing: .2em;
+  font-size: 11px;
+  font-weight: 600;
+  color: #E84545;
+  opacity: 0;
+  transition: opacity 700ms var(--ease), color 400ms ease;
+  pointer-events: none;
+}
+
+body.hint .or-hint {
+  opacity: 1;
+}
+
 .rope-click {
   position: absolute;
   left: clamp(18px, 4vw, 60px);
-  top: calc(min(62vh, 560px) + 42px);
-  transform: translateX(-35%);
-  padding: 7px 10px;
+  top: calc(min(62vh, 560px) + 64px);
+  transform: translateX(-50%);
+  padding: 10px 20px;
   border-radius: 999px;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-  color: var(--text-muted);
-  font-size: 9px;
+  border: none;
+  background: transparent;
+  color: #E84545;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: .18em;
+  letter-spacing: .2em;
   text-transform: uppercase;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 500ms var(--ease), transform 300ms var(--soft), background 300ms var(--soft), color 300ms var(--soft);
+  transition: opacity 500ms var(--ease), transform 300ms var(--soft), color 300ms var(--soft);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.rope-click::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  background: conic-gradient(from 0deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(232, 69, 69, 0.6) 45%,
+      #E84545 50%,
+      transparent 50%,
+      transparent 85%,
+      rgba(232, 69, 69, 0.6) 95%,
+      #E84545 100%);
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: -2;
+  animation: rotateLight 2s linear infinite;
+}
+
+.rope-click::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 999px;
+  background: #000;
+  z-index: -1;
+  transition: background 300ms var(--soft);
+}
+
+body[data-theme="light"] .rope-click::after {
+  background: var(--bg-color);
 }
 
 body.hint .rope-click {
-  opacity: .82;
+  opacity: 1;
   pointer-events: auto;
-  animation: ropeClickPulse 2.2s ease-in-out infinite;
 }
 
 .rope-click:hover {
-  transform: translateX(-35%) translateY(-2px);
-  background: var(--glass-hover);
-  color: var(--text-white);
+  transform: translateX(-50%) translateY(-2px);
 }
 
-@keyframes ropeClickPulse {
-
-  0%,
-  100% {
-    box-shadow: 0 0 0 rgba(var(--glow-rgb)/0);
+@keyframes rotateLight {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 
-  50% {
-    box-shadow: 0 0 18px rgba(var(--glow-rgb)/0.12);
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -372,7 +425,8 @@ body.hint .rope-click {
   width: 100%;
 }
 
-.cin-page-1, .cin-page-2 {
+.cin-page-1,
+.cin-page-2 {
   grid-area: 1 / 1;
   width: 100%;
   transition: opacity 900ms var(--ease), filter 900ms var(--ease), transform 900ms var(--ease);
@@ -431,7 +485,8 @@ body.rope-powered.home-header .cin-page-2 {
   will-change: opacity, filter;
   display: inline-block;
   isolation: isolate;
-  margin-right: -.08em; /* Perfectly centers despite letter-spacing */
+  margin-right: -.08em;
+  /* Perfectly centers despite letter-spacing */
 }
 
 body.rope-powered .cin-name {
@@ -506,12 +561,14 @@ html[data-accent-mode="black"] body[data-theme="light"] .cin-name {
   flex-wrap: wrap;
   opacity: 0;
   transform: translateY(8px);
+  pointer-events: none;
   transition: opacity 900ms var(--ease), transform 900ms var(--ease);
 }
 
 body.rope-powered .cin-links {
   opacity: .95;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 body.home-header .cin-links {
@@ -1800,6 +1857,7 @@ section:not(.cin-stage)::before {
   .contact-form-card {
     padding: 22px 18px;
   }
+
   .form-group-row {
     grid-template-columns: 1fr;
   }
@@ -1963,16 +2021,19 @@ section:not(.cin-stage)::before {
     text-align: left !important;
     padding: 10px 20px 10px 72px;
   }
+
   .timeline-item:nth-child(odd) {
     padding-right: 20px;
     left: 0 !important;
     text-align: left !important;
   }
+
   .timeline-item:nth-child(even) {
     padding-left: 72px;
     left: 0 !important;
     text-align: left !important;
   }
+
   .timeline-dot {
     left: 23px !important;
     right: auto !important;
@@ -1980,14 +2041,17 @@ section:not(.cin-stage)::before {
     height: 14px;
     top: 20px;
   }
+
   .timeline-item:nth-child(odd) .timeline-dot {
     left: 23px !important;
     right: auto !important;
   }
+
   .timeline-item:nth-child(even) .timeline-dot {
     left: 23px !important;
     right: auto !important;
   }
+
   .timeline-content {
     padding: 15px;
   }
@@ -2032,7 +2096,8 @@ body.cursor-hover .cursor-outline {
   border-color: rgba(var(--glow-rgb)/0.7);
 }
 
-@media (pointer: fine), (any-pointer: fine) {
+@media (pointer: fine),
+(any-pointer: fine) {
   body {
     cursor: none;
   }
@@ -2434,6 +2499,7 @@ body[data-theme="light"] .chat-widget {
   text-decoration: underline;
   font-weight: 900;
 }
+
 .chat-bubble a:hover {
   opacity: .9;
 }
