@@ -1176,3 +1176,249 @@ window.addEventListener('resize', () => {
       });
   });
 })();
+
+// ============================
+// VISITOR NOTIFICATION TOAST CONTROLLER
+// ============================
+(() => {
+  const toast = document.getElementById('visitorToast');
+  const closeBtn = document.getElementById('visitorToastClose');
+  const form = document.getElementById('visitorToastForm');
+  const nameInput = document.getElementById('visitorToastName');
+  const messageInput = document.getElementById('visitorToastMessage');
+  const submitBtn = document.getElementById('visitorToastSubmit');
+  const contentArea = document.getElementById('visitorToastContent');
+  const successArea = document.getElementById('visitorToastSuccess');
+  const successMsg = document.getElementById('visitorToastSuccessMsg');
+  const collapsedBtn = document.getElementById('visitorToastCollapsed');
+
+  if (!toast || !form || !submitBtn || !messageInput) return;
+
+  const CHAT_NAME_KEY = 'chat_user_name_v1';
+
+  // Clear legacy suppression keys so the user/visitors always have access to Say Hi
+  try {
+    localStorage.removeItem('portfolio_visitor_waved');
+    localStorage.removeItem('portfolio_visitor_dismissed_until');
+  } catch {}
+
+  function getKnownName() {
+    try {
+      return sessionStorage.getItem(CHAT_NAME_KEY) || '';
+    } catch {
+      return '';
+    }
+  }
+
+  function showToast() {
+    const known = getKnownName();
+    if (known && nameInput && !nameInput.value) {
+      nameInput.value = known;
+    }
+
+    toast.classList.add('is-visible');
+    toast.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideToast() {
+    toast.classList.remove('is-expanded');
+  }
+
+  collapsedBtn?.addEventListener('click', () => {
+    toast.classList.add('is-expanded');
+    setTimeout(() => {
+      if (nameInput && !nameInput.value) {
+        nameInput.focus();
+      } else if (messageInput) {
+        messageInput.focus();
+      }
+    }, 150);
+  });
+
+  closeBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideToast();
+  });
+
+  // Detect Referrer neatly
+  function parseReferrer() {
+    const ref = document.referrer;
+    if (!ref) return 'Direct Visit / Bookmark';
+    try {
+      const url = new URL(ref);
+      const host = url.hostname.toLowerCase();
+      if (host.includes('linkedin.')) return 'LinkedIn';
+      if (host.includes('google.')) return 'Google Search';
+      if (host.includes('github.')) return 'GitHub';
+      if (host.includes('twitter.') || host.includes('x.com') || host.includes('t.co')) return 'Twitter / X';
+      if (host.includes('instagram.')) return 'Instagram';
+      if (host.includes('youtube.')) return 'YouTube';
+      return `${url.hostname}${url.pathname}`;
+    } catch {
+      return ref;
+    }
+  }
+
+  // Detect Device
+  function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return 'Tablet';
+    }
+    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(ua)) {
+      return 'Mobile';
+    }
+    return 'Desktop';
+  }
+
+  // Detect Browser
+  function getBrowserName() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Firefox/')) return 'Firefox';
+    if (ua.includes('Edg/')) return 'Microsoft Edge';
+    if (ua.includes('Chrome/')) return 'Chrome';
+    if (ua.includes('Safari/')) return 'Safari';
+    if (ua.includes('OPR/') || ua.includes('Opera/')) return 'Opera';
+    return 'Unknown Browser';
+  }
+
+  // Detect OS
+  function getOSName() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Win')) return 'Windows';
+    if (ua.includes('Mac')) return 'macOS';
+    if (ua.includes('Linux')) return 'Linux';
+    if (ua.includes('Android')) return 'Android';
+    if (ua.includes('like Mac')) return 'iOS';
+    return 'Unknown OS';
+  }
+
+  // Form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const visitorName = nameInput.value.trim();
+    if (!visitorName) return; // Name is required
+    const message = messageInput.value.trim() || 'No message provided.';
+
+    // Sync name to offline chatbot storage
+    try {
+      if (nameInput?.value.trim()) {
+        sessionStorage.setItem(CHAT_NAME_KEY, visitorName);
+        const botNameEl = document.getElementById('chatBotName');
+        const avatarEl = document.getElementById('chatAvatar');
+        if (botNameEl) botNameEl.textContent = `${visitorName}'s Bot`;
+        if (avatarEl) avatarEl.textContent = visitorName.charAt(0).toUpperCase();
+      }
+    } catch {}
+
+    // Set sending state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>`;
+
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    const currentPage = window.location.pathname + (window.location.hash || '');
+    const referrer = parseReferrer();
+    const device = getDeviceType();
+    const browser = getBrowserName();
+    const os = getOSName();
+    const screenRes = `${window.screen.width}x${window.screen.height}`;
+
+    const emailBody = `Portfolio Visitor Wave!
+
+Name: ${visitorName}
+Message: ${message}
+
+-- Details --
+Date: ${formattedDate}
+Time: ${formattedTime}
+Page: ${currentPage || '/'}
+Referrer: ${referrer}
+Device: ${device} (${screenRes})
+Browser: ${browser}
+Operating System: ${os}
+
+---------------------------------------
+Sent via Sreehari V's Portfolio Visitor Notification`;
+
+    const formData = new FormData();
+    formData.append('access_key', 'bd479e84-4e8d-4fd8-808c-97fa08eeef98');
+    formData.append('subject', `👋 Portfolio Wave from ${visitorName}`);
+    formData.append('from_name', 'Portfolio Visitor Wave');
+    formData.append('name', visitorName);
+    formData.append('email', 'visitor@portfolio.sreehari');
+    formData.append('message', emailBody);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.status === 200) {
+        markWaved();
+        // Show success state
+        if (contentArea) contentArea.style.display = 'none';
+        if (successArea) successArea.style.display = 'flex';
+        if (successMsg) successMsg.textContent = `Thanks, ${visitorName}! Sreehari has been notified of your visit.`;
+
+        // Automatically reset and collapse back to "Say Hi!" button after 3.5 seconds
+        setTimeout(() => {
+          toast.classList.remove('is-expanded');
+          if (contentArea) contentArea.style.display = 'block';
+          if (successArea) successArea.style.display = 'none';
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>Send</span> <i class="fas fa-paper-plane"></i>`;
+        }, 3500);
+      } else {
+        throw new Error('Failed to notify');
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<span>Send</span> <i class="fas fa-paper-plane"></i>`;
+      alert('Could not send notification. Please try again or reach out directly!');
+    }
+  });
+
+  // Wait 7 seconds (within 5 - 10 sec range) after user visits the site before popping up
+  const POPUP_DELAY_MS = 7000;
+  let popupTimer = null;
+
+  function scheduleToast() {
+    if (popupTimer || toast.classList.contains('is-visible')) return;
+    popupTimer = setTimeout(() => {
+      // If user is still on the locked cinematic stage, wait until they unlock
+      if (document.body.classList.contains('scroll-locked')) {
+        const unlockObserver = new MutationObserver(() => {
+          if (!document.body.classList.contains('scroll-locked')) {
+            unlockObserver.disconnect();
+            showToast();
+          }
+        });
+        unlockObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      } else {
+        showToast();
+      }
+    }, POPUP_DELAY_MS);
+  }
+
+  scheduleToast();
+
+  // Hide toast when chatbot opens to avoid overlap, restore when closed
+  const chatWidget = document.getElementById('chatWidget');
+  if (chatWidget) {
+    const chatObserver = new MutationObserver(() => {
+      const isOpen = chatWidget.classList.contains('is-open');
+      if (isOpen) {
+        toast.style.opacity = '0';
+        toast.style.pointerEvents = 'none';
+      } else if (toast.classList.contains('is-visible')) {
+        toast.style.opacity = '';
+        toast.style.pointerEvents = '';
+      }
+    });
+    chatObserver.observe(chatWidget, { attributes: true, attributeFilter: ['class'] });
+  }
+})();

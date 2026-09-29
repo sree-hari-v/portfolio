@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 
-  <link rel="stylesheet" href="style.css?v=20260715" />
+  <link rel="stylesheet" href="style.css?v=20260929v7" />
   <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -495,6 +495,71 @@
   </footer>
 
   <!-- ============================
+       VISITOR NOTIFICATION TOAST
+       ============================ -->
+  <aside class="visitor-toast" id="visitorToast" role="region" aria-label="Visitor notification" aria-hidden="true">
+    <!-- Collapsed State -->
+    <button class="visitor-toast-collapsed" id="visitorToastCollapsed" type="button" aria-label="Say Hi">
+      <span class="wave-icon">👋</span> <span class="collapsed-text">Say Hi!</span>
+    </button>
+
+    <!-- Expanded State -->
+    <div class="visitor-toast-expanded" id="visitorToastExpanded">
+      <button class="visitor-toast-close" id="visitorToastClose" type="button" aria-label="Dismiss notification" title="Dismiss">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="visitor-toast-content" id="visitorToastContent">
+        <div class="visitor-toast-header">
+          <span class="visitor-toast-badge">👋 Say Hi!</span>
+        </div>
+
+        <form class="visitor-toast-form" id="visitorToastForm" autocomplete="off">
+          <input type="hidden" name="access_key" value="bd479e84-4e8d-4fd8-808c-97fa08eeef98" />
+          
+          <div class="visitor-toast-input-wrap">
+            <i class="fas fa-user visitor-toast-icon"></i>
+            <input
+              type="text"
+              id="visitorToastName"
+              name="visitor_name"
+              placeholder="Your Name"
+              maxlength="60"
+              required
+            />
+          </div>
+          
+          <div class="visitor-toast-input-wrap">
+            <i class="fas fa-comment-alt visitor-toast-icon" style="top: 12px; transform: none;"></i>
+            <textarea
+              id="visitorToastMessage"
+              name="message"
+              placeholder="Your message (Optional)..."
+              rows="2"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="visitor-toast-submit" id="visitorToastSubmit">
+            <span>Send</span>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Success confirmation state -->
+      <div class="visitor-toast-success" id="visitorToastSuccess" style="display: none;">
+        <div class="visitor-toast-success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="visitor-toast-success-text">
+          <h4>Sent!</h4>
+          <p id="visitorToastSuccessMsg">Thanks for saying hi!</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================
        OFFLINE CHATBOT (UI)
        ============================ -->
   <button class="chat-fab" id="chatFab" type="button" aria-label="Open chat" title="Chat">
@@ -537,8 +602,8 @@
   </aside>
 
   
-  <script src="chatbot-answers.js?v=20260715"></script>
-  <script src="script.js?v=20260715"></script>
+  <script src="chatbot-answers.js?v=20260929"></script>
+  <script src="script.js?v=20260929v3"></script>
 </body>
 
 </html>
