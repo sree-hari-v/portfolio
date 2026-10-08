@@ -508,7 +508,7 @@ export default function Portfolio() {
 
             {/* Card 4: Send Message */}
             <button type="button" className="contact-card achievement-card tilt-card" aria-label="Send Message"
-              onClick={() => (window as unknown as { openContactModal?: () => void }).openContactModal?.()} style={{ background: 'none', border: '1px solid var(--border-color)', outline: 'none', textAlign: 'left', fontFamily: 'inherit' }}>
+              onClick={() => (window as unknown as { openContactModal?: () => void }).openContactModal?.()} style={{ outline: 'none', textAlign: 'left', fontFamily: 'inherit', color: 'inherit' }}>
               <div className="card-header" style={{ marginBottom: 0 }}>
                 <i className="fas fa-paper-plane folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
