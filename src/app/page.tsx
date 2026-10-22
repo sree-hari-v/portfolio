@@ -169,7 +169,15 @@ export default function Portfolio() {
 
           <div className="about-image-wrapper">
             <div className="about-frame" aria-label="Profile picture">
-              <img src="https://github.com/sree-hari-v.png" alt="Sreehari V" className="about-pic" />
+              <img
+                src="https://github.com/sree-hari-v.png"
+                alt="Sreehari V"
+                className="about-pic"
+                loading="lazy"
+                decoding="async"
+                width={320}
+                height={388}
+              />
             </div>
           </div>
         </div>
