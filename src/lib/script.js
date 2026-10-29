@@ -15,6 +15,7 @@ export default function initInteractions() {
   const DEFAULT_ACCENT = { hex: '#E84545', rgb: '232 69 69' };
   let currentAccent = { ...DEFAULT_ACCENT };
   let particlesReady = false;
+  let powered = false;
 
   // ============================
   // THEME TOGGLE (system default + stage/nav controls)
@@ -157,7 +158,7 @@ export default function initInteractions() {
     const scanlines = document.getElementById('cinScanlines');
     const jitter = document.getElementById('cinJitter');
 
-    let powered = false;
+    powered = false;
     let pulling = false;
     let startY = 0;
     let pullPx = 0;
@@ -1530,14 +1531,17 @@ export default function initInteractions() {
     }
 
     function openChat(skipInitialGreet = false) {
-      widget.classList.add('is-open');
-      widget.setAttribute('aria-hidden', 'false');
+      const widgetEl = document.getElementById('chatWidget') || widget;
+      if (!widgetEl) return;
+      widgetEl.classList.add('is-open');
+      widgetEl.setAttribute('aria-hidden', 'false');
+      body.classList.add('chat-open', 'show-floating-widgets');
 
       const userName = getUserName();
       setHeaderName(userName);
 
-      if (!widget.dataset.greeted) {
-        widget.dataset.greeted = '1';
+      if (!widgetEl.dataset.greeted) {
+        widgetEl.dataset.greeted = '1';
 
         if (!skipInitialGreet) {
           if (!userName) {
@@ -1548,7 +1552,10 @@ export default function initInteractions() {
         }
       }
 
-      setTimeout(() => input?.focus(), 0);
+      setTimeout(() => {
+        const inp = document.getElementById('chatText') || input;
+        inp?.focus();
+      }, 50);
 
       const sidePrompt = document.getElementById('chatFabSidePrompt');
       if (sidePrompt) {
@@ -1587,12 +1594,17 @@ export default function initInteractions() {
       return isFull;
     }
 
-    function closeChat() {
+    function closeChat(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
       const widgetEl = document.getElementById('chatWidget') || widget;
       if (widgetEl) {
         widgetEl.classList.remove('is-open', 'is-fullscreen');
         widgetEl.setAttribute('aria-hidden', 'true');
       }
+      body.classList.remove('chat-open');
       const targetIcon = document.getElementById('chatMaximizeIcon') || maxIcon;
       const targetBtn = document.getElementById('chatMaximize') || maxBtn;
       if (targetIcon) targetIcon.className = 'fa-solid fa-expand';
@@ -1602,10 +1614,19 @@ export default function initInteractions() {
       }
     }
 
-    function toggleChat() {
+    let lastChatToggle = 0;
+    function toggleChat(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      const now = Date.now();
+      if (now - lastChatToggle < 300) return;
+      lastChatToggle = now;
+
       const widgetEl = document.getElementById('chatWidget') || widget;
       if (!widgetEl) return;
-      widgetEl.classList.contains('is-open') ? closeChat() : openChat();
+      widgetEl.classList.contains('is-open') ? closeChat(e) : openChat();
     }
 
     window.toggleChat = toggleChat;
@@ -1642,8 +1663,8 @@ export default function initInteractions() {
       addMessage(replySegments, 'bot');
     }
 
-    fab.addEventListener('click', toggleChat);
-    closeBtn.addEventListener('click', closeChat);
+    fab.onclick = (e) => toggleChat(e);
+    closeBtn.onclick = (e) => closeChat(e);
     // Note: chatMaximize click is handled via React's onClick delegating to window.toggleFullScreenChat
     // to avoid duplicate event dispatch cancellations in React/Next.js.
 
@@ -1753,20 +1774,13 @@ export default function initInteractions() {
   // ============================
   function canShowFloatingWidgets() {
     const y = window.scrollY || document.documentElement.scrollTop;
-    return body.classList.contains('home-header') || body.classList.contains('stage-hidden') || y > 50;
+    return powered || body.classList.contains('rope-powered') || body.classList.contains('home-header') || body.classList.contains('stage-hidden') || body.classList.contains('chat-open') || y > 20;
   }
   const isAboutOrBelow = canShowFloatingWidgets;
 
   function updateFloatingWidgetsVisibility() {
     const show = canShowFloatingWidgets();
-    body.classList.toggle('show-floating-widgets', show);
-    if (!show) {
-      const widget = document.getElementById('chatWidget');
-      if (widget && widget.classList.contains('is-open')) {
-        widget.classList.remove('is-open');
-        widget.setAttribute('aria-hidden', 'true');
-      }
-    }
+    body.classList.toggle('show-floating-widgets', show || body.classList.contains('chat-open'));
   }
 
   window.addEventListener('scroll', updateFloatingWidgetsVisibility, { passive: true });

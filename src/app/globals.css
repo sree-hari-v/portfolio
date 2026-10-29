@@ -2957,10 +2957,12 @@ body.cursor-hover .cursor-outline {
 
 body.show-floating-widgets .chat-fab,
 body.home-header .chat-fab,
-body.stage-hidden .chat-fab {
+body.stage-hidden .chat-fab,
+body.chat-open .chat-fab {
   opacity: 1 !important;
   pointer-events: auto !important;
   transform: translateY(0) scale(1) !important;
+  visibility: visible !important;
 }
 
 body.show-floating-widgets .chat-fab:hover,
@@ -3106,9 +3108,10 @@ body[data-theme="light"] .chat-widget {
 }
 
 .chat-widget.is-open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) scale(1) !important;
+  visibility: visible !important;
 }
 
 .chat-header {

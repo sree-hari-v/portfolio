@@ -5,6 +5,7 @@
  */
 
 export function setupChatbot() {
+  if (typeof window === 'undefined') return;
   window.ChatbotAnswers = (function () {
 
     // Link directory mapped from index.html
@@ -441,3 +442,7 @@ export function setupChatbot() {
 
   })();
 }
+
+if (typeof window !== 'undefined') {
+  setupChatbot();
+}

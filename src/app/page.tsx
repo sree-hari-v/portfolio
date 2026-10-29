@@ -747,7 +747,16 @@ export default function Portfolio() {
         type="button"
         aria-label="Open chat"
         title="Chat"
-        onClick={() => { if (typeof window !== 'undefined' && (window as unknown as { toggleChat?: () => void }).toggleChat) (window as unknown as { toggleChat?: () => void }).toggleChat?.(); }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (typeof window !== 'undefined') {
+            const win = window as unknown as { toggleChat?: (e?: unknown) => void };
+            if (typeof win.toggleChat === 'function') {
+              win.toggleChat(e);
+            }
+          }
+        }}
       >
         <i className="fa-solid fa-comment-dots"></i>
       </button>
