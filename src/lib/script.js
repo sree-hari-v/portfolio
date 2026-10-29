@@ -297,7 +297,13 @@ export default function initInteractions() {
 
     cta?.addEventListener('click', (e) => {
       e.preventDefault();
-      if (!powered) return;
+      if (!powered) {
+        powerOn();
+        setTimeout(() => {
+          window.scrollTo({ top: Math.max(120, window.innerHeight * 0.22), behavior: "smooth" });
+        }, 80);
+        return;
+      }
       window.scrollTo({ top: Math.max(120, window.innerHeight * 0.22), behavior: "smooth" });
     });
 
@@ -406,7 +412,7 @@ export default function initInteractions() {
       if (hasMoved) {
         const dx = mouseX - outlineX;
         const dy = mouseY - outlineY;
-        
+
         if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
           outlineX = mouseX;
           outlineY = mouseY;
@@ -415,7 +421,7 @@ export default function initInteractions() {
           outlineX += dx * 0.18;
           outlineY += dy * 0.18;
         }
-        
+
         const cursorOutline = document.querySelector('.cursor-outline');
         if (cursorOutline) {
           cursorOutline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
@@ -493,16 +499,154 @@ export default function initInteractions() {
     document.querySelectorAll('section').forEach(section => sectionObserver.observe(section));
 
     const timeline = document.getElementById('timeline-container');
-    if (timeline) {
-      const obs = new IntersectionObserver((entries, ob) => {
-        entries.forEach(ent => {
-          if (ent.isIntersecting) {
-            timeline.classList.add('line-active');
-            ob.unobserve(ent.target);
+    const timelineProgress = document.getElementById('timelineProgress');
+    const timelineSection = document.getElementById('timeline');
+    if (timeline && timelineProgress && timelineSection) {
+      const items = timeline.querySelectorAll('.timeline-item');
+      const dots = timeline.querySelectorAll('.timeline-dot');
+      let isNavigatingToTimeline = false;
+      let navAnimTimer = null;
+
+      function getMilestoneY(index) {
+        const item = items[index];
+        if (!item) return 0;
+        const dot = dots[index];
+        const dotCenter = dot && dot.offsetHeight ? (dot.offsetTop + dot.offsetHeight / 2) : 27;
+        return item.offsetTop + dotCenter;
+      }
+
+      function updateTimeline(forceFirstItem = false) {
+        if (isNavigatingToTimeline && !forceFirstItem) return;
+
+        const secRect = timelineSection.getBoundingClientRect();
+        const containerRect = timeline.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        const navOffset = window.innerWidth <= 768 ? 95 : 85;
+        const totalHeight = timeline.offsetHeight - 30;
+
+        const firstMilestone = items.length ? getMilestoneY(0) : 45;
+        const lastMilestone = items.length ? getMilestoneY(items.length - 1) : totalHeight;
+
+        // Force reset/start at first milestone (e.g. when clicked from nav bar)
+        if (forceFirstItem) {
+          timelineProgress.classList.add('is-drawing');
+          timelineProgress.style.height = `${firstMilestone}px`;
+          items.forEach((item, index) => {
+            const dot = dots[index];
+            if (index === 0) {
+              if (dot) dot.classList.add('dot-active');
+              item.classList.add('item-active');
+            } else {
+              if (dot) dot.classList.remove('dot-active');
+              item.classList.remove('item-active');
+            }
+          });
+          return;
+        }
+
+        // When timeline section is far below viewport (not yet visible)
+        if (secRect.top > vh * 0.85) {
+          timelineProgress.style.height = '0px';
+          timelineProgress.classList.remove('is-drawing');
+          items.forEach((item) => item.classList.remove('item-active'));
+          dots.forEach((dot) => dot.classList.remove('dot-active'));
+          return;
+        }
+
+        // Focal line in the viewport: items and the progress beam only advance as each item reaches focus
+        // Anything below this line remains completely hidden (opacity: 0)
+        const focusY = window.innerWidth <= 768 ? (vh * 0.50) : (vh * 0.44);
+        const lineTopInViewport = containerRect.top + 18;
+        const rawHeight = focusY - lineTopInViewport;
+
+        let targetHeight = 0;
+
+        if (rawHeight <= 0) {
+          targetHeight = 0;
+          timelineProgress.classList.remove('is-drawing');
+          timelineProgress.style.height = '0px';
+        } else {
+          timelineProgress.classList.add('is-drawing');
+          // If user is at or above the landing header, cap at first milestone so items below stay hidden
+          if (secRect.top >= navOffset - 10) {
+            targetHeight = Math.min(rawHeight, firstMilestone);
+          } else {
+            targetHeight = Math.min(rawHeight, lastMilestone);
+          }
+          timelineProgress.style.height = `${targetHeight}px`;
+        }
+
+        // Reveal timeline items one by one as the progress beam reaches each milestone
+        // Items below the beam REMAIN COMPLETELY HIDDEN (opacity: 0)
+        items.forEach((item, index) => {
+          const dot = dots[index];
+          const milestoneY = getMilestoneY(index);
+          const activateThreshold = milestoneY - 14;
+          const deactivateThreshold = milestoneY - 50;
+
+          if (targetHeight >= activateThreshold) {
+            if (dot) dot.classList.add('dot-active');
+            item.classList.add('item-active');
+          } else if (targetHeight < deactivateThreshold) {
+            if (dot) dot.classList.remove('dot-active');
+            item.classList.remove('item-active');
           }
         });
-      }, { threshold: 0.25 });
-      obs.observe(timeline);
+      }
+
+      window.addEventListener('scroll', () => updateTimeline(), { passive: true });
+      window.addEventListener('resize', () => updateTimeline(), { passive: true });
+      setTimeout(() => updateTimeline(), 250);
+
+      // Listen to Timeline nav clicks so it always starts from the first item with comfortable clearance
+      document.querySelectorAll('a[href="#timeline"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (window.innerWidth <= 1024) {
+            const navLinks = document.getElementById('nav-links');
+            const menuBtn = document.getElementById('menu-btn');
+            const menuBackdrop = document.getElementById('menu-backdrop');
+            navLinks?.classList.remove('active');
+            menuBtn?.classList.remove('active');
+            menuBtn?.setAttribute('aria-expanded', 'false');
+            menuBackdrop?.classList.remove('active');
+            document.body.classList.remove('menu-open');
+          }
+
+          const targetSec = document.getElementById('timeline');
+          if (!targetSec) return;
+
+          isNavigatingToTimeline = true;
+          clearTimeout(navAnimTimer);
+
+          // Reset to 0 initially
+          timelineProgress.style.transition = 'none';
+          timelineProgress.style.height = '0px';
+          timelineProgress.classList.remove('is-drawing');
+          items.forEach((item) => item.classList.remove('item-active'));
+          dots.forEach((dot) => dot.classList.remove('dot-active'));
+
+          // Calculate exact landing scroll position with generous navbar clearance
+          const navOffset = window.innerWidth <= 768 ? 95 : 85;
+          const targetY = targetSec.getBoundingClientRect().top + window.scrollY - navOffset;
+
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: 'smooth'
+          });
+
+          // Once scroll reaches section, smoothly draw to first milestone
+          navAnimTimer = setTimeout(() => {
+            timelineProgress.style.transition = 'height 0.65s cubic-bezier(0.22, 1, 0.36, 1)';
+            updateTimeline(true);
+
+            setTimeout(() => {
+              timelineProgress.style.transition = 'height 0.12s linear';
+              isNavigatingToTimeline = false;
+            }, 700);
+          }, 350);
+        });
+      });
     }
   })();
 
@@ -1102,7 +1246,7 @@ export default function initInteractions() {
       ctx.beginPath();
       for (let j = 0; j < buckets[i].length; j += 2) {
         ctx.moveTo(buckets[i][j].x, buckets[i][j].y);
-        ctx.lineTo(buckets[i][j+1].x, buckets[i][j+1].y);
+        ctx.lineTo(buckets[i][j + 1].x, buckets[i][j + 1].y);
       }
       ctx.stroke();
     }
@@ -1169,6 +1313,8 @@ export default function initInteractions() {
     const fab = document.getElementById('chatFab');
     const widget = document.getElementById('chatWidget');
     const closeBtn = document.getElementById('chatClose');
+    const maxBtn = document.getElementById('chatMaximize');
+    const maxIcon = document.getElementById('chatMaximizeIcon');
     const brandBtn = document.getElementById('chatBrand');
     const bodyEl = document.getElementById('chatBody');
     const form = document.getElementById('chatForm');
@@ -1231,6 +1377,127 @@ export default function initInteractions() {
           a.target = seg.href && seg.href.startsWith('http') ? "_blank" : "_self";
           a.rel = "noopener noreferrer";
           container.appendChild(a);
+        } else if (seg.type === "contact_form") {
+          const card = document.createElement('div');
+          card.className = 'chat-inline-contact-card';
+
+          const cardHeader = document.createElement('div');
+          cardHeader.className = 'chat-inline-contact-header';
+          cardHeader.innerHTML = `
+            <span class="chat-inline-badge">✉️ Contact Sreehari</span>
+            <span class="chat-inline-hint">Direct Email</span>
+          `;
+          card.appendChild(cardHeader);
+
+          const form = document.createElement('form');
+          form.className = 'chat-inline-form';
+          form.autoComplete = 'off';
+
+          const prefilledName = getUserName() || '';
+          const prefilledMsg = seg.userQuery || '';
+
+          form.innerHTML = `
+            <div class="chat-inline-field">
+              <i class="fas fa-user chat-inline-icon"></i>
+              <input type="text" name="visitor_name" class="chat-inline-input" placeholder="Your Name" value="${prefilledName.replace(/"/g, '&quot;')}" required />
+            </div>
+            <div class="chat-inline-field">
+              <i class="fas fa-envelope chat-inline-icon"></i>
+              <input type="email" name="visitor_email" class="chat-inline-input" placeholder="Your Email address" required />
+            </div>
+            <div class="chat-inline-field">
+              <i class="fas fa-comment-alt chat-inline-icon" style="top: 12px; transform: none;"></i>
+              <textarea name="visitor_message" class="chat-inline-textarea" rows="2" placeholder="Your message..." required>${prefilledMsg.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+            </div>
+            <div class="chat-inline-actions">
+              <button type="submit" class="chat-inline-submit">
+                <span>Send Email</span> <i class="fas fa-paper-plane"></i>
+              </button>
+              <button type="button" class="chat-inline-modal-link">
+                <span>Or open full contact form</span> <i class="fas fa-arrow-up-right-from-square"></i>
+              </button>
+            </div>
+            <div class="chat-inline-status" style="display: none;"></div>
+          `;
+
+          const modalBtn = form.querySelector('.chat-inline-modal-link');
+          modalBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.openContactModal) window.openContactModal();
+          });
+
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = form.querySelector('.chat-inline-submit');
+            const statusEl = form.querySelector('.chat-inline-status');
+            const nameInput = form.querySelector('input[name="visitor_name"]');
+            const emailInput = form.querySelector('input[name="visitor_email"]');
+            const msgInput = form.querySelector('textarea[name="visitor_message"]');
+
+            const nameVal = nameInput?.value.trim() || '';
+            const emailVal = emailInput?.value.trim() || '';
+            const msgVal = msgInput?.value.trim() || '';
+
+            if (!nameVal || !emailVal || !msgVal) return;
+
+            // Remember user name
+            setUserName(nameVal);
+            setHeaderName(nameVal);
+
+            if (submitBtn) {
+              submitBtn.disabled = true;
+              submitBtn.innerHTML = `<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>`;
+            }
+
+            const accessKey = document.querySelector('input[name="access_key"]')?.value || process.env.NEXT_PUBLIC_WEB3FORMS_KEY || '';
+
+            const formData = new FormData();
+            formData.append('access_key', accessKey);
+            formData.append('subject', `💬 Chatbot Inquiry from ${nameVal}`);
+            formData.append('from_name', `${nameVal} (via Portfolio Chatbot)`);
+            formData.append('name', nameVal);
+            formData.append('email', emailVal);
+            formData.append('message', `Portfolio Chatbot Visitor Inquiry:\n\nName: ${nameVal}\nEmail: ${emailVal}\n\nQuestion / Message:\n${msgVal}\n\nSent from Portfolio Chatbot Screen`);
+
+            try {
+              const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+              });
+              const json = await res.json();
+              if (res.status === 200 || json.success) {
+                card.innerHTML = `
+                  <div class="chat-inline-success">
+                    <i class="fas fa-check-circle chat-inline-success-icon"></i>
+                    <div class="chat-inline-success-text">
+                      <strong>Email Sent to Sreehari!</strong>
+                      <p>Thanks ${nameVal}, Sreehari has received your message and will respond to <strong>${emailVal}</strong>.</p>
+                    </div>
+                  </div>
+                `;
+              } else {
+                throw new Error(json.message || 'Error sending');
+              }
+            } catch (err) {
+              if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.className = 'chat-inline-status error';
+                statusEl.innerHTML = `Could not send automatically. You can email Sreehari directly at <a href="mailto:sreehari.vengalil@gmail.com" style="color:inherit;text-decoration:underline;">sreehari.vengalil@gmail.com</a>.`;
+              }
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span>Retry Sending</span> <i class="fas fa-paper-plane"></i>`;
+              }
+            }
+
+            // Keep scroll at bottom
+            setTimeout(() => {
+              if (bodyEl) bodyEl.scrollTop = bodyEl.scrollHeight;
+            }, 60);
+          });
+
+          card.appendChild(form);
+          container.appendChild(card);
         }
       }
     }
@@ -1262,7 +1529,7 @@ export default function initInteractions() {
       bodyEl.scrollTop = bodyEl.scrollHeight;
     }
 
-    function openChat() {
+    function openChat(skipInitialGreet = false) {
       widget.classList.add('is-open');
       widget.setAttribute('aria-hidden', 'false');
 
@@ -1272,24 +1539,85 @@ export default function initInteractions() {
       if (!widget.dataset.greeted) {
         widget.dataset.greeted = '1';
 
-        if (!userName) {
-          addMessage("Hey! Before we start — what’s your name?\nType: “my name is …” or “call me …”", "bot");
-        } else {
-          addMessage(`Welcome back, ${userName}. Ask me about projects, skills, experience, or contact links.`, "bot");
+        if (!skipInitialGreet) {
+          if (!userName) {
+            addMessage("Hey! Feel free to ask about Sreehari's projects, skills, experience, or contact links.\nOr tell me your name (“call me ...”)!", "bot");
+          } else {
+            addMessage(`Welcome back, ${userName}. Ask me about projects, skills, experience, or contact links.`, "bot");
+          }
         }
       }
 
-      setTimeout(() => input.focus(), 0);
+      setTimeout(() => input?.focus(), 0);
+
+      const sidePrompt = document.getElementById('chatFabSidePrompt');
+      if (sidePrompt) {
+        sidePrompt.classList.remove('is-visible');
+      }
+    }
+
+    function toggleFullScreen(forceState) {
+      const widgetEl = document.getElementById('chatWidget') || widget;
+      if (!widgetEl) return false;
+
+      const now = Date.now();
+      if (typeof forceState !== 'boolean' && window.__lastChatFullscreenToggle && (now - window.__lastChatFullscreenToggle < 300)) {
+        return widgetEl.classList.contains('is-fullscreen');
+      }
+      window.__lastChatFullscreenToggle = now;
+
+      const isFull = typeof forceState === 'boolean'
+        ? widgetEl.classList.toggle('is-fullscreen', forceState)
+        : widgetEl.classList.toggle('is-fullscreen');
+
+      const targetIcon = document.getElementById('chatMaximizeIcon') || maxIcon;
+      const targetBtn = document.getElementById('chatMaximize') || maxBtn;
+
+      if (targetIcon) {
+        targetIcon.className = isFull ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+      }
+      if (targetBtn) {
+        targetBtn.setAttribute('title', isFull ? 'Restore view' : 'Full screen');
+        targetBtn.setAttribute('aria-label', isFull ? 'Restore view' : 'Full screen');
+      }
+      const chatBody = document.getElementById('chatBody') || bodyEl;
+      setTimeout(() => {
+        if (chatBody) chatBody.scrollTop = chatBody.scrollHeight;
+      }, 50);
+      return isFull;
     }
 
     function closeChat() {
-      widget.classList.remove('is-open');
-      widget.setAttribute('aria-hidden', 'true');
+      const widgetEl = document.getElementById('chatWidget') || widget;
+      if (widgetEl) {
+        widgetEl.classList.remove('is-open', 'is-fullscreen');
+        widgetEl.setAttribute('aria-hidden', 'true');
+      }
+      const targetIcon = document.getElementById('chatMaximizeIcon') || maxIcon;
+      const targetBtn = document.getElementById('chatMaximize') || maxBtn;
+      if (targetIcon) targetIcon.className = 'fa-solid fa-expand';
+      if (targetBtn) {
+        targetBtn.setAttribute('title', 'Full screen');
+        targetBtn.setAttribute('aria-label', 'Full screen');
+      }
     }
 
     function toggleChat() {
-      widget.classList.contains('is-open') ? closeChat() : openChat();
+      const widgetEl = document.getElementById('chatWidget') || widget;
+      if (!widgetEl) return;
+      widgetEl.classList.contains('is-open') ? closeChat() : openChat();
     }
+
+    window.toggleChat = toggleChat;
+    window.openChat = openChat;
+    window.closeChat = closeChat;
+    window.toggleFullScreenChat = toggleFullScreen;
+    window.sendChatQuery = function (query) {
+      openChat(true);
+      setTimeout(() => {
+        sendUserText(query);
+      }, 100);
+    };
 
     function sendUserText(text) {
       const msg = String(text || '').trim();
@@ -1316,6 +1644,8 @@ export default function initInteractions() {
 
     fab.addEventListener('click', toggleChat);
     closeBtn.addEventListener('click', closeChat);
+    // Note: chatMaximize click is handled via React's onClick delegating to window.toggleFullScreenChat
+    // to avoid duplicate event dispatch cancellations in React/Next.js.
 
     // clicking on chatbot title/avatar area toggles
     brandBtn?.addEventListener('click', (e) => {
@@ -1334,17 +1664,21 @@ export default function initInteractions() {
       sendUserText(msg);
     });
 
-    // ESC closes
+    // ESC closes or exits fullscreen
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && widget.classList.contains('is-open')) {
-        closeChat();
+        if (widget.classList.contains('is-fullscreen')) {
+          toggleFullScreen();
+        } else {
+          closeChat();
+        }
       }
     });
 
-    // Click outside close
+    // Click outside close (only when not in fullscreen, since fullscreen covers the whole view)
     document.addEventListener('pointerdown', (e) => {
-      if (!widget.classList.contains('is-open')) return;
-      const inside = e.target.closest('#chatWidget') || e.target.closest('#chatFab');
+      if (!widget.classList.contains('is-open') || widget.classList.contains('is-fullscreen')) return;
+      const inside = e.target.closest('#chatWidget') || e.target.closest('#chatFab') || e.target.closest('#chatFabSidePrompt');
       if (!inside) closeChat();
     });
 
@@ -1357,8 +1691,246 @@ export default function initInteractions() {
       sendUserText(msg);
     });
 
+    // Isolate scrolling inside the chatbot so background page NEVER scrolls
+    widget.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+
+      const isChatBody = e.target.closest('#chatBody');
+      if (isChatBody && bodyEl) {
+        const { scrollTop, scrollHeight, clientHeight } = bodyEl;
+        const delta = e.deltaY;
+        const atTop = delta < 0 && scrollTop <= 1;
+        const atBottom = delta > 0 && (scrollTop + clientHeight >= scrollHeight - 2);
+
+        if (atTop || atBottom) {
+          e.preventDefault();
+        }
+      } else {
+        // If cursor is over header, chips, or input inside the widget, prevent background scroll
+        // and redirect vertical wheel scroll to chatBody
+        e.preventDefault();
+        if (bodyEl && e.deltaY) {
+          bodyEl.scrollTop += e.deltaY;
+        }
+      }
+    }, { passive: false });
+
+    // Touch event containment for mobile / touch devices
+    let chatTouchStartY = 0;
+    widget.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        chatTouchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    widget.addEventListener('touchmove', (e) => {
+      if (!bodyEl || e.touches.length !== 1) return;
+      const currentY = e.touches[0].clientY;
+      const deltaY = chatTouchStartY - currentY;
+      chatTouchStartY = currentY;
+
+      const isChatBody = e.target.closest('#chatBody');
+      if (isChatBody) {
+        const { scrollTop, scrollHeight, clientHeight } = bodyEl;
+        const atTop = deltaY < 0 && scrollTop <= 1;
+        const atBottom = deltaY > 0 && (scrollTop + clientHeight >= scrollHeight - 2);
+        if (atTop || atBottom) {
+          e.preventDefault();
+        }
+      } else {
+        e.preventDefault();
+        bodyEl.scrollTop += deltaY;
+      }
+    }, { passive: false });
+
     // set header immediately (even before open)
     setHeaderName(getUserName());
+  })();
+
+  // ============================
+  // FLOATING WIDGETS VISIBILITY (Page 2 & portfolio sections)
+  // Gating #chatFab, #chatFabSidePrompt, #visitorToast
+  // ============================
+  function canShowFloatingWidgets() {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    return body.classList.contains('home-header') || body.classList.contains('stage-hidden') || y > 50;
+  }
+  const isAboutOrBelow = canShowFloatingWidgets;
+
+  function updateFloatingWidgetsVisibility() {
+    const show = canShowFloatingWidgets();
+    body.classList.toggle('show-floating-widgets', show);
+    if (!show) {
+      const widget = document.getElementById('chatWidget');
+      if (widget && widget.classList.contains('is-open')) {
+        widget.classList.remove('is-open');
+        widget.setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+
+  window.addEventListener('scroll', updateFloatingWidgetsVisibility, { passive: true });
+  window.addEventListener('resize', updateFloatingWidgetsVisibility, { passive: true });
+
+  const bodyStageObserver = new MutationObserver(() => {
+    updateFloatingWidgetsVisibility();
+  });
+  bodyStageObserver.observe(body, { attributes: true, attributeFilter: ['class'] });
+
+  updateFloatingWidgetsVisibility();
+
+  // ============================
+  // CHAT FAB SIDE PROMPT CONTROLLER
+  // Cycles random prompts at intervals and upon user idle/inactivity
+  // ============================
+  (() => {
+    const sidePrompt = document.getElementById('chatFabSidePrompt');
+    const promptTextEl = document.getElementById('chatFabSidePromptText');
+    const widget = document.getElementById('chatWidget');
+    if (!sidePrompt || !promptTextEl) return;
+
+    const PROMPTS = [
+      {
+        display: "Ask about my tech stack! ⚡",
+        query: "What is your tech stack and skills?"
+      },
+      {
+        display: "Ask about my projects! 🚀",
+        query: "Tell me about your projects"
+      },
+      {
+        display: "Want to know about EduNex? 🤖",
+        query: "Tell me about EduNex"
+      },
+      {
+        display: "Need my resume? Just ask! 📄",
+        query: "Can I get your resume link?"
+      },
+      {
+        display: "Ask about my publications & research! 📚",
+        query: "Tell me about your published books and publications"
+      },
+      {
+        display: "Ask about my experience & internships! 💼",
+        query: "What is your work experience and internships?"
+      },
+      {
+        display: "Have questions about my code? Ask here! 💻",
+        query: "Where can I view your GitHub and code?"
+      },
+      {
+        display: "Looking to collaborate? Let's chat! ✨",
+        query: "Are you open to hire or collaborate?"
+      },
+      {
+        display: "Any doubts? Ask here! 💬",
+        query: "Who are you and what do you do?"
+      }
+    ];
+
+    let currentPromptIdx = 0;
+    let rotationInterval = null;
+    let idleTimer = null;
+    let hideTimer = null;
+
+    function showPrompt(itemOrText) {
+      if (!isAboutOrBelow()) return;
+      if (widget && widget.classList.contains('is-open')) return;
+
+      const displayText = typeof itemOrText === 'string'
+        ? itemOrText
+        : (itemOrText?.display || "Ask about my tech stack! ⚡");
+
+      if (promptTextEl) {
+        promptTextEl.textContent = displayText;
+      }
+      sidePrompt.classList.add('is-visible');
+
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!widget || !widget.classList.contains('is-open')) {
+          sidePrompt.classList.remove('is-visible');
+        }
+      }, 7500);
+    }
+
+    function nextPrompt() {
+      if (!isAboutOrBelow()) return;
+      if (widget && widget.classList.contains('is-open')) return;
+      sidePrompt.classList.remove('is-visible');
+      setTimeout(() => {
+        currentPromptIdx = (currentPromptIdx + 1) % PROMPTS.length;
+        showPrompt(PROMPTS[currentPromptIdx]);
+      }, 400);
+    }
+
+    // Interval: rotate prompts every 11 seconds
+    function startInterval() {
+      if (rotationInterval) clearInterval(rotationInterval);
+      rotationInterval = setInterval(nextPrompt, 11000);
+    }
+
+    // Idle detection: when user stops clicking/touching/scrolling for 6s, show prompt
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (!isAboutOrBelow()) return;
+        if (!widget || !widget.classList.contains('is-open')) {
+          const randomIdx = Math.floor(Math.random() * PROMPTS.length);
+          currentPromptIdx = randomIdx;
+          showPrompt(PROMPTS[randomIdx]);
+        }
+      }, 6000);
+    }
+
+    ['mousedown', 'touchstart', 'scroll', 'keydown', 'pointerdown'].forEach((evt) => {
+      window.addEventListener(evt, resetIdleTimer, { passive: true });
+    });
+
+    let lastPromptClick = 0;
+    function handlePromptClick(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const now = Date.now();
+      if (now - lastPromptClick < 500) return;
+      lastPromptClick = now;
+
+      const item = PROMPTS[currentPromptIdx] || PROMPTS[0];
+      const query = item.query || item.display || "What is your tech stack and skills?";
+
+      if (window.sendChatQuery) {
+        window.sendChatQuery(query);
+      } else if (window.openChat) {
+        window.openChat();
+      }
+    }
+
+    sidePrompt.addEventListener('click', handlePromptClick);
+    window.askChatbotSidePrompt = handlePromptClick;
+
+    // Start prompt cycle once About is reached
+    function initPromptCycle() {
+      if (isAboutOrBelow()) {
+        showPrompt(PROMPTS[0]);
+        startInterval();
+        resetIdleTimer();
+      } else {
+        const onReachAbout = () => {
+          if (isAboutOrBelow()) {
+            window.removeEventListener('scroll', onReachAbout);
+            setTimeout(() => {
+              showPrompt(PROMPTS[0]);
+              startInterval();
+              resetIdleTimer();
+            }, 800);
+          }
+        };
+        window.addEventListener('scroll', onReachAbout, { passive: true });
+      }
+    }
+    initPromptCycle();
   })();
 
   // ============================
@@ -1514,6 +2086,12 @@ export default function initInteractions() {
       hideToast();
     });
 
+    // Prevent background page scrolling when cursor is over the toast form
+    toast.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    }, { passive: false });
+
     // Detect Referrer neatly
     function parseReferrer() {
       const ref = document.referrer;
@@ -1655,26 +2233,28 @@ Sent via Sreehari V's Portfolio Visitor Notification`;
       }
     });
 
-    // Wait 7 seconds (within 5 - 10 sec range) after user visits the site before popping up
-    const POPUP_DELAY_MS = 7000;
+    // Display Say Hi notification after 1.5s once Page 2 / site is active
+    const POPUP_DELAY_MS = 1500;
     let popupTimer = null;
 
     function scheduleToast() {
       if (popupTimer || toast.classList.contains('is-visible')) return;
-      popupTimer = setTimeout(() => {
-        // If user is still on the locked cinematic stage, wait until they unlock
-        if (document.body.classList.contains('scroll-locked')) {
-          const unlockObserver = new MutationObserver(() => {
-            if (!document.body.classList.contains('scroll-locked')) {
-              unlockObserver.disconnect();
-              showToast();
+
+      function triggerToast() {
+        if (!isAboutOrBelow()) {
+          const onReachAboutToast = () => {
+            if (isAboutOrBelow()) {
+              window.removeEventListener('scroll', onReachAboutToast);
+              popupTimer = setTimeout(showToast, POPUP_DELAY_MS);
             }
-          });
-          unlockObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+          };
+          window.addEventListener('scroll', onReachAboutToast, { passive: true });
         } else {
-          showToast();
+          popupTimer = setTimeout(showToast, POPUP_DELAY_MS);
         }
-      }, POPUP_DELAY_MS);
+      }
+
+      triggerToast();
     }
 
     scheduleToast();

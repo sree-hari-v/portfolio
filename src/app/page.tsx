@@ -154,15 +154,11 @@ export default function Portfolio() {
               </div>
               <div className="about-stat-card tilt-card">
                 <span className="stat-number">1</span>
-                <span className="stat-label">ML Internship</span>
+                <span className="stat-label">Internship</span>
               </div>
               <div className="about-stat-card tilt-card">
                 <span className="stat-number">4+</span>
-                <span className="stat-label">Hackathons</span>
-              </div>
-              <div className="about-stat-card tilt-card">
-                <span className="stat-number">4+</span>
-                <span className="stat-label">Certifications</span>
+                <span className="stat-label">Certificates</span>
               </div>
             </div>
           </div>
@@ -185,75 +181,115 @@ export default function Portfolio() {
 
       <section id="skills">
         <h2 className="section-title reveal">My <span>Tech Arsenal</span></h2>
-        <div className="skills-grid reveal delay-2">
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=nextjs" alt="Next.js" />
-            <p>Next.js</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=react" alt="React.js" />
-            <p>React.js</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=nodejs" alt="Node.js" />
-            <p>Node.js</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=python" alt="Python" />
-            <p>Python</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=java" alt="Java" />
-            <p>Java</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=cpp" alt="C++" />
-            <p>C++</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=js" alt="JavaScript" />
-            <p>JavaScript</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB" />
-            <p>MongoDB</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=supabase" alt="Supabase" />
-            <p>Supabase</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=firebase" alt="Firebase" />
-            <p>Firebase</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind" />
-            <p>Tailwind</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=html" alt="HTML5" />
-            <p>HTML5</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=linux" alt="Linux" />
-            <p>Linux</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=git" alt="Git" />
-            <p>Git</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=github" alt="GitHub" />
-            <p>GitHub</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=postman" alt="Postman" />
-            <p>Postman</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=androidstudio" alt="Android Studio" />
-            <p>Android Studio</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=vscode" alt="VS Code" />
-            <p>VS Code</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=webstorm" alt="WebStorm" />
-            <p>WebStorm</p>
-          </div>
-          <div className="skill-item"><img src="https://skillicons.dev/icons?i=pycharm" alt="PyCharm" />
-            <p>PyCharm</p>
-          </div>
-          <div className="skill-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg"
-            alt="Salesforce" style={{ background: 'white', padding: '2px', borderRadius: '10px' }} />
-            <p>Salesforce</p>
-          </div>
-          <div className="skill-item"><img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Microsoft_365_%282022%29.svg" alt="MS Office"
-            style={{ background: 'white', padding: '2px', borderRadius: '10px' }} />
-            <p>MS Office</p>
+        <div className="skills-pyramid-wrap reveal delay-2">
+          <div className="skills-grid skills-pyramid">
+            {/* Level 1: Frontend (Next.js) */}
+            <div className="pyramid-tier tier-1">
+              <div className="skill-item peak-item">
+                <img src="https://skillicons.dev/icons?i=nextjs" alt="Next.js" />
+                <p>Next.js</p>
+              </div>
+            </div>
+
+            {/* Level 2: Core Frontend (2 Items) */}
+            <div className="pyramid-tier tier-2">
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=react" alt="React.js" />
+                <p>React.js</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=ts" alt="TypeScript" />
+                <p>TypeScript</p>
+              </div>
+            </div>
+
+            {/* Level 3: Core Web Environment (3 Items) */}
+            <div className="pyramid-tier tier-3">
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=js" alt="JavaScript" />
+                <p>JavaScript</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=tailwind" alt="Tailwind CSS" />
+                <p>Tailwind CSS</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=nodejs" alt="Node.js" />
+                <p>Node.js</p>
+              </div>
+            </div>
+
+            {/* Level 4: Backend & Specialized Logic (4 Items) */}
+            <div className="pyramid-tier tier-4">
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=python" alt="Python" />
+                <p>Python</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=django" alt="Django" />
+                <p>Django</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=java" alt="Java" />
+                <p>Java</p>
+              </div>
+              <div className="skill-item">
+                <img src="/icons/apex.svg" alt="Apex" />
+                <p>Apex</p>
+              </div>
+            </div>
+
+            {/* Level 5: Data Layer & Services (5 Items) */}
+            <div className="pyramid-tier tier-5">
+              <div className="skill-item">
+                <img src="/icons/sql.svg" alt="SQL" />
+                <p>SQL</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=postgres" alt="PostgreSQL" />
+                <p>PostgreSQL</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=mongodb" alt="MongoDB" />
+                <p>MongoDB</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=redis" alt="Redis" />
+                <p>Redis</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=firebase" alt="Firebase" />
+                <p>Firebase</p>
+              </div>
+            </div>
+
+            {/* Level 6: Infrastructure, Cloud & DevOps (6 Items) */}
+            <div className="pyramid-tier tier-6">
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=aws" alt="AWS" />
+                <p>AWS</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=docker" alt="Docker" />
+                <p>Docker</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=kubernetes" alt="Kubernetes" />
+                <p>Kubernetes</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=linux" alt="Linux" />
+                <p>Linux</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=git" alt="Git" />
+                <p>Git</p>
+              </div>
+              <div className="skill-item">
+                <img src="https://skillicons.dev/icons?i=githubactions" alt="GitHub Actions" />
+                <p>GitHub Actions</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -426,7 +462,12 @@ export default function Portfolio() {
       <section id="timeline">
         <h2 className="section-title reveal">My <span>Journey</span></h2>
         <div className="timeline-container" id="timeline-container">
-          <div className="timeline-item reveal slide-right">
+          <div className="timeline-line-track" aria-hidden="true"></div>
+          <div className="timeline-line-progress" id="timelineProgress" aria-hidden="true">
+            <div className="timeline-line-glow-head"></div>
+          </div>
+
+          <div className="timeline-item slide-right">
             <div className="timeline-dot"></div>
             <div className="timeline-content tilt-card">
               <span className="time-date">2021 - 2023</span>
@@ -436,7 +477,7 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <div className="timeline-item reveal slide-left">
+          <div className="timeline-item slide-left">
             <div className="timeline-dot"></div>
             <div className="timeline-content tilt-card">
               <span className="time-date">2023 - 2026</span>
@@ -446,7 +487,7 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <div className="timeline-item reveal slide-right">
+          <div className="timeline-item slide-right">
             <div className="timeline-dot"></div>
             <div className="timeline-content tilt-card">
               <span className="time-date">Mid 2024</span>
@@ -456,7 +497,7 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <div className="timeline-item reveal slide-left">
+          <div className="timeline-item slide-left">
             <div className="timeline-dot"></div>
             <div className="timeline-content tilt-card">
               <span className="time-date">Late 2025</span>
@@ -466,7 +507,7 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <div className="timeline-item reveal slide-right">
+          <div className="timeline-item slide-right">
             <div className="timeline-dot"></div>
             <div className="timeline-content tilt-card">
               <span className="time-date">2025 - Present</span>
@@ -671,7 +712,43 @@ export default function Portfolio() {
       {/* ============================
        OFFLINE CHATBOT (UI)
        ============================ */}
-      <button className="chat-fab" id="chatFab" type="button" aria-label="Open chat" title="Chat">
+      {/* Chatbot Side Dynamic Prompt Bubble */}
+      <div
+        className="chat-fab-side-prompt"
+        id="chatFabSidePrompt"
+        role="button"
+        tabIndex={0}
+        aria-label="Ask chatbot"
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            const win = window as unknown as { askChatbotSidePrompt?: () => void; toggleChat?: () => void };
+            if (win.askChatbotSidePrompt) win.askChatbotSidePrompt();
+            else if (win.toggleChat) win.toggleChat();
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            if (typeof window !== 'undefined') {
+              const win = window as unknown as { askChatbotSidePrompt?: () => void; toggleChat?: () => void };
+              if (win.askChatbotSidePrompt) win.askChatbotSidePrompt();
+              else if (win.toggleChat) win.toggleChat();
+            }
+          }
+        }}
+      >
+        <span className="chat-fab-side-prompt-sparkle">✨</span>
+        <span className="chat-fab-side-prompt-text" id="chatFabSidePromptText">Ask about my tech stack! ⚡</span>
+        <div className="chat-fab-side-prompt-tail"></div>
+      </div>
+
+      <button
+        className="chat-fab"
+        id="chatFab"
+        type="button"
+        aria-label="Open chat"
+        title="Chat"
+        onClick={() => { if (typeof window !== 'undefined' && (window as unknown as { toggleChat?: () => void }).toggleChat) (window as unknown as { toggleChat?: () => void }).toggleChat?.(); }}
+      >
         <i className="fa-solid fa-comment-dots"></i>
       </button>
 
@@ -687,9 +764,54 @@ export default function Portfolio() {
             </div>
           </button>
 
-          <button className="chat-close" id="chatClose" type="button" aria-label="Close chat" title="Close">
-            <i className="fas fa-times"></i>
-          </button>
+          <div className="chat-header-actions">
+            <button
+              className="chat-action-btn chat-maximize"
+              id="chatMaximize"
+              type="button"
+              aria-label="Toggle full screen"
+              title="Full screen"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof window !== 'undefined') {
+                  const win = window as unknown as { toggleFullScreenChat?: () => void };
+                  if (typeof win.toggleFullScreenChat === 'function') {
+                    win.toggleFullScreenChat();
+                    return;
+                  }
+                }
+                const chatWidget = document.getElementById('chatWidget');
+                const icon = document.getElementById('chatMaximizeIcon');
+                if (chatWidget) {
+                  const isFull = chatWidget.classList.toggle('is-fullscreen');
+                  if (icon) {
+                    icon.className = isFull ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+                  }
+                  e.currentTarget.setAttribute('title', isFull ? 'Restore view' : 'Full screen');
+                  e.currentTarget.setAttribute('aria-label', isFull ? 'Restore view' : 'Full screen');
+                }
+              }}
+            >
+              <i className="fa-solid fa-expand" id="chatMaximizeIcon" style={{ pointerEvents: 'none' }}></i>
+            </button>
+            <button
+              className="chat-action-btn chat-close"
+              id="chatClose"
+              type="button"
+              aria-label="Close chat"
+              title="Close"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof window !== 'undefined') {
+                  (window as unknown as { closeChat?: () => void }).closeChat?.();
+                }
+              }}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
         </header>
 
         <div className="chat-body" id="chatBody" role="log" aria-live="polite" aria-relevant="additions"></div>
@@ -701,7 +823,21 @@ export default function Portfolio() {
           <button type="button" className="chat-chip" data-msg="contact"><i className="fa-solid fa-address-card"></i><span>Contact</span></button>
         </div>
 
-        <form className="chat-input" id="chatForm" autoComplete="off">
+        <form
+          className="chat-input"
+          id="chatForm"
+          autoComplete="off"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const textInput = document.getElementById('chatText') as HTMLInputElement | null;
+            const msg = textInput?.value.trim();
+            if (!msg) return;
+            if (textInput) textInput.value = '';
+            if (typeof window !== 'undefined') {
+              (window as unknown as { sendChatQuery?: (q: string) => void }).sendChatQuery?.(msg);
+            }
+          }}
+        >
           <input id="chatText" type="text" inputMode="text" placeholder="Ask about projects, skills, resume, contact..."
             aria-label="Chat message" />
           <button id="chatSend" type="submit" aria-label="Send message" title="Send">
