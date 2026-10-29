@@ -5,6 +5,19 @@ import './globals.css';
 import initInteractions from '@/lib/script';
 import { setupChatbot } from '@/lib/chatbot';
 
+interface PortfolioWindow extends Window {
+  toggleTheme?: () => void;
+  selectExperience?: (index: number, event: MouseEvent) => void;
+  selectProject?: (index: number, event: MouseEvent) => void;
+  selectAchievement?: (index: number, event: MouseEvent) => void;
+  toggleChat?: (e?: unknown) => void;
+  closeChat?: (e?: unknown) => void;
+  toggleFullScreenChat?: () => void;
+  sendChatQuery?: (query: string) => void;
+  askChatbotSidePrompt?: () => void;
+  openContactModal?: () => void;
+}
+
 export default function Portfolio() {
   useEffect(() => {
     setupChatbot();
@@ -71,7 +84,7 @@ export default function Portfolio() {
 
 
         <div className="accent-picker" id="accentPicker" aria-label="Accent color picker">
-          <button className="stage-theme-toggle" id="theme-toggle-stage" type="button" aria-label="Toggle Light Mode" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).toggleTheme) (window as any).toggleTheme(); }}>
+          <button className="stage-theme-toggle" id="theme-toggle-stage" type="button" aria-label="Toggle Light Mode" onClick={() => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).toggleTheme?.(); }}>
             <i className="fas fa-moon"></i>
           </button>
           <button className="accent-dot" data-accent="#E84545" data-rgb="232 69 69" title="Red" aria-label="Red"></button>
@@ -116,7 +129,7 @@ export default function Portfolio() {
           <li><a href="#contact">Contact</a></li>
 
           <li className="theme-li">
-            <button id="theme-toggle-nav" aria-label="Toggle Light Mode" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).toggleTheme) (window as any).toggleTheme(); }}>
+            <button id="theme-toggle-nav" aria-label="Toggle Light Mode" onClick={() => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).toggleTheme?.(); }}>
               <i className="fas fa-moon"></i>
             </button>
           </li>
@@ -299,7 +312,7 @@ export default function Portfolio() {
 
         <div className="experience-container reveal delay-2" id="experience-container">
           <div className="experience-list" id="experience-list">
-            <div className="exp-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).selectExperience) (window as any).selectExperience(0, e.nativeEvent) }}>
+            <div className="exp-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectExperience?.(0, e.nativeEvent) }}>
               <div className="card-header">
                 <i className="fas fa-laptop-code folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
@@ -311,7 +324,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <div className="exp-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).selectExperience) (window as any).selectExperience(1, e.nativeEvent) }}>
+            <div className="exp-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectExperience?.(1, e.nativeEvent) }}>
               <div className="card-header">
                 <i className="fas fa-book folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
@@ -323,7 +336,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <div className="exp-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).selectExperience) (window as any).selectExperience(2, e.nativeEvent) }}>
+            <div className="exp-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectExperience?.(2, e.nativeEvent) }}>
               <div className="card-header">
                 <i className="fas fa-book folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
@@ -344,7 +357,7 @@ export default function Portfolio() {
         <h2 className="section-title reveal">Featured <span>Projects</span></h2>
         <div className="projects-container reveal delay-2" id="projects-container">
           <div className="project-list" id="project-list">
-            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).selectProject) (window as any).selectProject(0, e.nativeEvent) }}>
+            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectProject?.(0, e.nativeEvent) }}>
               <div className="card-header">
                 <i className="far fa-folder folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
@@ -360,7 +373,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).selectProject) (window as any).selectProject(1, e.nativeEvent) }}>
+            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectProject?.(1, e.nativeEvent) }}>
               <div className="card-header">
                 <i className="far fa-folder folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
@@ -376,7 +389,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined' && (window as any).selectProject) (window as any).selectProject(2, e.nativeEvent) }}>
+            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectProject?.(2, e.nativeEvent) }}>
               <div className="card-header">
                 <i className="far fa-folder folder-icon"></i>
                 <i className="fas fa-arrow-right expand-icon"></i>
@@ -754,6 +767,13 @@ export default function Portfolio() {
             const win = window as unknown as { toggleChat?: (e?: unknown) => void };
             if (typeof win.toggleChat === 'function') {
               win.toggleChat(e);
+            } else {
+              const widget = document.getElementById('chatWidget');
+              if (widget) {
+                const isOpen = widget.classList.toggle('is-open');
+                widget.setAttribute('aria-hidden', (!isOpen).toString());
+                document.body.classList.toggle('chat-open', isOpen);
+              }
             }
           }
         }}
@@ -814,7 +834,17 @@ export default function Portfolio() {
                 e.preventDefault();
                 e.stopPropagation();
                 if (typeof window !== 'undefined') {
-                  (window as unknown as { closeChat?: () => void }).closeChat?.();
+                  const win = window as unknown as { closeChat?: (e?: unknown) => void };
+                  if (typeof win.closeChat === 'function') {
+                    win.closeChat(e);
+                  } else {
+                    const widget = document.getElementById('chatWidget');
+                    if (widget) {
+                      widget.classList.remove('is-open', 'is-fullscreen');
+                      widget.setAttribute('aria-hidden', 'true');
+                      document.body.classList.remove('chat-open');
+                    }
+                  }
                 }
               }}
             >
@@ -830,6 +860,8 @@ export default function Portfolio() {
           <button type="button" className="chat-chip" data-msg="skills"><i className="fa-solid fa-bolt"></i><span>Skills</span></button>
           <button type="button" className="chat-chip" data-msg="resume link"><i className="fa-solid fa-file-lines"></i><span>Resume</span></button>
           <button type="button" className="chat-chip" data-msg="contact"><i className="fa-solid fa-address-card"></i><span>Contact</span></button>
+          <button type="button" className="chat-chip" data-msg="linkedin"><i className="fab fa-linkedin-in"></i><span>LinkedIn</span></button>
+          <button type="button" className="chat-chip" data-msg="github"><i className="fab fa-github"></i><span>GitHub</span></button>
         </div>
 
         <form

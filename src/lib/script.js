@@ -1385,10 +1385,37 @@ export default function initInteractions() {
           const cardHeader = document.createElement('div');
           cardHeader.className = 'chat-inline-contact-header';
           cardHeader.innerHTML = `
-            <span class="chat-inline-badge">✉️ Contact Sreehari</span>
-            <span class="chat-inline-hint">Direct Email</span>
+            <span class="chat-inline-badge">✉️ Contact & Connect</span>
+            <span class="chat-inline-hint">Direct & Socials</span>
           `;
           card.appendChild(cardHeader);
+
+          const socials = document.createElement('div');
+          socials.className = 'chat-inline-socials';
+          socials.innerHTML = `
+            <a href="https://www.linkedin.com/in/sreehari-v-a15084321/" target="_blank" rel="noopener noreferrer" class="chat-inline-social-btn" title="LinkedIn Profile">
+              <i class="fab fa-linkedin-in"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/sree-hari-v" target="_blank" rel="noopener noreferrer" class="chat-inline-social-btn" title="GitHub Profile">
+              <i class="fab fa-github"></i>
+              <span>GitHub</span>
+            </a>
+            <a href="https://drive.google.com/file/d/1o1KKzYHzRdbiPagUZu1ik9rLi5ewDoie/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="chat-inline-social-btn" title="Resume">
+              <i class="far fa-file-alt"></i>
+              <span>Resume</span>
+            </a>
+            <a href="mailto:sreehari.vengalil@gmail.com" class="chat-inline-social-btn" title="Direct Email">
+              <i class="far fa-envelope"></i>
+              <span>Email</span>
+            </a>
+          `;
+          card.appendChild(socials);
+
+          const divider = document.createElement('div');
+          divider.className = 'chat-inline-divider';
+          divider.innerHTML = `<span>or send a direct message</span>`;
+          card.appendChild(divider);
 
           const form = document.createElement('form');
           form.className = 'chat-inline-form';
@@ -1552,10 +1579,13 @@ export default function initInteractions() {
         }
       }
 
-      setTimeout(() => {
-        const inp = document.getElementById('chatText') || input;
-        inp?.focus();
-      }, 50);
+      // Only auto-focus on desktop / non-touch screens to avoid abrupt mobile keyboard popups
+      if (!isMobile && !isTouchDevice && window.innerWidth > 768) {
+        setTimeout(() => {
+          const inp = document.getElementById('chatText') || input;
+          inp?.focus();
+        }, 80);
+      }
 
       const sidePrompt = document.getElementById('chatFabSidePrompt');
       if (sidePrompt) {
@@ -1621,7 +1651,7 @@ export default function initInteractions() {
         if (typeof e.stopPropagation === 'function') e.stopPropagation();
       }
       const now = Date.now();
-      if (now - lastChatToggle < 300) return;
+      if (now - lastChatToggle < 250) return;
       lastChatToggle = now;
 
       const widgetEl = document.getElementById('chatWidget') || widget;
@@ -1663,10 +1693,40 @@ export default function initInteractions() {
       addMessage(replySegments, 'bot');
     }
 
+    // Touch and click handling on fab for instant, responsive mobile tap
+    let fabTouchStart = 0;
+    let fabTouchX = 0;
+    let fabTouchY = 0;
+
+    fab.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        fabTouchStart = Date.now();
+        fabTouchX = e.touches[0].clientX;
+        fabTouchY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    fab.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length === 1) {
+        const dx = Math.abs(e.changedTouches[0].clientX - fabTouchX);
+        const dy = Math.abs(e.changedTouches[0].clientY - fabTouchY);
+        const dur = Date.now() - fabTouchStart;
+        if (dx < 15 && dy < 15 && dur < 500) {
+          if (e.cancelable) e.preventDefault();
+          e.stopPropagation();
+          toggleChat(e);
+        }
+      }
+    }, { passive: false });
+
     fab.onclick = (e) => toggleChat(e);
+
+    closeBtn.addEventListener('touchend', (e) => {
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+      closeChat(e);
+    }, { passive: false });
     closeBtn.onclick = (e) => closeChat(e);
-    // Note: chatMaximize click is handled via React's onClick delegating to window.toggleFullScreenChat
-    // to avoid duplicate event dispatch cancellations in React/Next.js.
 
     // clicking on chatbot title/avatar area toggles
     brandBtn?.addEventListener('click', (e) => {
@@ -1696,9 +1756,10 @@ export default function initInteractions() {
       }
     });
 
-    // Click outside close (only when not in fullscreen, since fullscreen covers the whole view)
+    // Click outside close (only when not in fullscreen and NOT on mobile viewports)
     document.addEventListener('pointerdown', (e) => {
       if (!widget.classList.contains('is-open') || widget.classList.contains('is-fullscreen')) return;
+      if (window.innerWidth <= 768) return; // On mobile, widget is full-screen, closed via close button
       const inside = e.target.closest('#chatWidget') || e.target.closest('#chatFab') || e.target.closest('#chatFabSidePrompt');
       if (!inside) closeChat();
     });
@@ -1771,16 +1832,30 @@ export default function initInteractions() {
   // ============================
   // FLOATING WIDGETS VISIBILITY (Page 2 & portfolio sections)
   // Gating #chatFab, #chatFabSidePrompt, #visitorToast
+  // Strictly hidden on the first page (cinematic stage page 1)
   // ============================
-  function canShowFloatingWidgets() {
+  function isPastFirstPage() {
     const y = window.scrollY || document.documentElement.scrollTop;
-    return powered || body.classList.contains('rope-powered') || body.classList.contains('home-header') || body.classList.contains('stage-hidden') || body.classList.contains('chat-open') || y > 20;
+    const viewport = window.innerHeight || 800;
+    const homeHeaderThreshold = Math.max(60, viewport * 0.10);
+    return body.classList.contains('home-header') || body.classList.contains('stage-hidden') || y > homeHeaderThreshold;
   }
-  const isAboutOrBelow = canShowFloatingWidgets;
+
+  function canShowFloatingWidgets() {
+    if (body.classList.contains('chat-open')) return true;
+    return isPastFirstPage();
+  }
+  const isAboutOrBelow = isPastFirstPage;
 
   function updateFloatingWidgetsVisibility() {
     const show = canShowFloatingWidgets();
-    body.classList.toggle('show-floating-widgets', show || body.classList.contains('chat-open'));
+    body.classList.toggle('show-floating-widgets', show);
+    if (!show && !body.classList.contains('chat-open')) {
+      const sidePrompt = document.getElementById('chatFabSidePrompt');
+      if (sidePrompt) sidePrompt.classList.remove('is-visible');
+      const toast = document.getElementById('visitorToast');
+      if (toast) toast.classList.remove('is-visible', 'is-expanded');
+    }
   }
 
   window.addEventListener('scroll', updateFloatingWidgetsVisibility, { passive: true });
@@ -2252,23 +2327,36 @@ Sent via Sreehari V's Portfolio Visitor Notification`;
     let popupTimer = null;
 
     function scheduleToast() {
-      if (popupTimer || toast.classList.contains('is-visible')) return;
-
-      function triggerToast() {
-        if (!isAboutOrBelow()) {
-          const onReachAboutToast = () => {
-            if (isAboutOrBelow()) {
-              window.removeEventListener('scroll', onReachAboutToast);
-              popupTimer = setTimeout(showToast, POPUP_DELAY_MS);
-            }
-          };
-          window.addEventListener('scroll', onReachAboutToast, { passive: true });
-        } else {
-          popupTimer = setTimeout(showToast, POPUP_DELAY_MS);
-        }
+      function checkAndTriggerToast() {
+        if (!isPastFirstPage()) return;
+        if (popupTimer || toast.classList.contains('is-visible')) return;
+        popupTimer = setTimeout(() => {
+          if (isPastFirstPage()) {
+            showToast();
+          }
+        }, POPUP_DELAY_MS);
       }
 
-      triggerToast();
+      window.addEventListener('scroll', () => {
+        if (isPastFirstPage()) {
+          if (!toast.classList.contains('is-visible') && !popupTimer) {
+            popupTimer = setTimeout(() => {
+              if (isPastFirstPage()) {
+                showToast();
+              }
+            }, POPUP_DELAY_MS);
+          }
+        } else {
+          // Hide toast if user scrolls back up to the first page
+          toast.classList.remove('is-visible', 'is-expanded');
+          if (popupTimer) {
+            clearTimeout(popupTimer);
+            popupTimer = null;
+          }
+        }
+      }, { passive: true });
+
+      checkAndTriggerToast();
     }
 
     scheduleToast();
