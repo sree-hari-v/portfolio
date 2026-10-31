@@ -20,7 +20,9 @@ export function setupChatbot() {
       hub_live: "https://cs-tech-hub.vercel.app/",
       hub_git: "https://github.com/sree-hari-v/cs-tech-hub",
       grievance_live: "https://cs-dept-grievance-portal.vercel.app/",
-      grievance_git: "https://github.com/sree-hari-v/department-grievance-portal"
+      grievance_git: "https://github.com/sree-hari-v/department-grievance-portal",
+      music_player_git: "https://github.com/sree-hari-v/music-player",
+      music_player_release: "https://github.com/sree-hari-v/music-player/releases/tag/v1.0.0"
     };
 
     // The comprehensive, all-inclusive FAQ dataset
@@ -359,13 +361,14 @@ Ask me about any specific technology for more details!`
       // ==========================================
       {
         keywords: ["projects", "portfolio projects", "show projects", "work", "applications built", "things you built", "featured projects", "what have you made", "creations", "showcase", "list projects"],
-        answer: `Sreehari has built 15+ projects. His top three featured applications are:
+        answer: `Sreehari has built 15+ projects. His top featured applications are:
 
 1. 🤖 EduNex: An interactive AI-driven college chatbot automating routine campus inquiries 24/7.
-2. 🚀 Project Hub: A centralized developer dashboard featuring category filtering & 3D tilt physics.
-3. 🛡️ Grievance Portal: A secure, transparent student complaint redressal platform with live status tracking.
+2. 🎵 Music Player: A sleek offline Android music player with synced lyrics & Spotify-grade visuals.
+3. 🚀 Project Hub: A centralized developer dashboard featuring category filtering & 3D tilt physics.
+4. 🛡️ Grievance Portal: A secure, transparent student complaint redressal platform with live status tracking.
 
-Reply with any project name to get in-depth details, tech stack, and live demo links!`
+Reply with any project name to get in-depth details, tech stack, and links!`
       },
       {
         keywords: ["edunex", "college chatbot", "ai chatbot", "campus chatbot", "student chatbot", "tell me about edunex"],
@@ -448,6 +451,47 @@ Reply with any project name to get in-depth details, tech stack, and live demo l
           { type: "link", href: LINKS.grievance_live, label: "🚀 Grievance Portal Live Demo" },
           { type: "newline" },
           { type: "link", href: LINKS.grievance_git, label: "💻 Grievance Portal GitHub Repository" }
+        ]
+      },
+      {
+        keywords: ["music player", "android music player", "flutter music player", "offline music player", "tell me about music player", "shadow player", "shadowplayer"],
+        answer: `Music Player is a sleek, modern offline music player for Android built with Flutter, inspired by Spotify's design language.
+
+• Features: High-fidelity offline playback with just_audio, real-time synchronized & plain karaoke lyrics with LRCLIB API, in-app lyrics translation into English subtitles, Spotify-inspired Canvas visualizer with gesture controls, and modern Android Storage Access Framework (SAF) integration.
+• Architecture: Clean, feature-driven architecture with Riverpod 2.x state management.
+• Scoped Storage: Modern SAF integration for selecting custom folders without broad storage permissions.
+• GitHub Repository: https://github.com/sree-hari-v/music-player`
+      },
+      {
+        keywords: ["music player tech stack", "how did you build music player", "what powers music player", "music player technologies", "shadow player tech stack"],
+        answer: `Music Player was built using:
+• Flutter & Dart: Cross-platform framework powering a smooth dark aesthetic UI.
+• Riverpod 2.x (flutter_riverpod): Robust reactive state management.
+• just_audio: Low-latency, high-fidelity offline audio playback engine with background playback and native MediaSession controls.
+• Android Storage Access Framework (SAF): Modern scoped storage access for custom music folder authorization.
+• audio_metadata_reader: ID3 metadata extraction (sample rate, bitrate, album art, duration).
+• LRCLIB API: Real-time karaoke synchronized lyrics with multi-level offline disk caching.`
+      },
+      {
+        keywords: ["music player link", "music player github", "show me music player", "download music player", "music player apk", "shadow player link", "shadow player github", "music player live", "music player release"],
+        answer: [
+          { type: "text", text: "Explore Music Player and download the latest release:" },
+          { type: "newline" },
+          { type: "newline" },
+          { type: "link", href: LINKS.music_player_release, label: "🚀 Music Player v1.0.0 APK Release" },
+          { type: "newline" },
+          { type: "link", href: LINKS.music_player_git, label: "💻 Music Player GitHub Repository" }
+        ]
+      },
+      {
+        keywords: ["mobile app", "android app", "flutter", "flutter project", "mobile project", "android project", "have you built mobile apps"],
+        answer: [
+          { type: "text", text: "Yes! Sreehari built Music Player, a high-fidelity offline music player for Android engineered with Flutter and Dart. It features Spotify-inspired Canvas visuals, synchronized karaoke lyrics (LRCLIB), and modern Android SAF scoped storage.\n\nCheck out the release or repository:" },
+          { type: "newline" },
+          { type: "newline" },
+          { type: "link", href: LINKS.music_player_release, label: "🚀 Download Music Player APK (v1.0.0)" },
+          { type: "newline" },
+          { type: "link", href: LINKS.music_player_git, label: "🎵 Music Player on GitHub" }
         ]
       },
       {

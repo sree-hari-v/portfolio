@@ -404,6 +404,22 @@ export default function Portfolio() {
                   Live</a>
               </div>
             </div>
+
+            <div className="project-card tilt-card" onClick={(e) => { if (typeof window !== 'undefined') (window as unknown as PortfolioWindow).selectProject?.(3, e.nativeEvent) }}>
+              <div className="card-header">
+                <i className="far fa-folder folder-icon"></i>
+                <i className="fas fa-arrow-right expand-icon"></i>
+              </div>
+              <h3>Music Player</h3>
+              <p>A sleek offline Android music player with synced lyrics, Spotify Canvas visuals, and SAF storage.</p>
+              <div className="card-footer-links">
+                <a href="https://github.com/sree-hari-v/music-player" className="card-link-btn" target="_blank"
+                  rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}><i className="fab fa-github"></i> GitHub</a>
+                <a href="https://github.com/sree-hari-v/music-player/releases/tag/v1.0.0" className="card-link-btn card-link-live" target="_blank"
+                  rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}><i className="fas fa-external-link-alt"></i>
+                  Live</a>
+              </div>
+            </div>
           </div>
 
           <div className="project-detail-view" id="project-details"></div>

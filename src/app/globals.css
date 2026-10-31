@@ -1568,11 +1568,20 @@ section:not(.cin-stage)::before {
   gap: 30px;
 }
 
-.experience-list,
-.project-list {
+.experience-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 26px;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  transition: all .4s var(--soft);
+}
+
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
@@ -2476,10 +2485,15 @@ section:not(.cin-stage)::before {
     align-items: center;
   }
 
-  .experience-list,
-  .project-list {
+  .experience-list {
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
+    width: 100%;
+  }
+
+  .project-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
     width: 100%;
   }
 

@@ -33,7 +33,7 @@
   - [Configuration Files](#configuration-files)
 - [Portfolio Data from Code](#-portfolio-data-from-code)
   - [1. Tech Arsenal Pyramid (21 Technologies)](#1-tech-arsenal-pyramid-21-technologies)
-  - [2. Featured Projects (3 Projects)](#2-featured-projects-3-projects)
+  - [2. Featured Projects (4 Projects)](#2-featured-projects-4-projects)
   - [3. Professional Experience & Publications (3 Entries)](#3-professional-experience--publications-3-entries)
   - [4. Key Achievements (4 Honors)](#4-key-achievements-4-honors)
   - [5. Journey Timeline (5 Milestones)](#5-journey-timeline-5-milestones)
@@ -431,6 +431,16 @@ Defined in `projects` array in `src/lib/script.js` and rendered in `src/app/page
 - **Tech Stack**: Next.js, Tailwind CSS, Firebase, TypeScript.
 - **Live Link**: `https://cs-dept-grievance-portal.vercel.app/`
 - **GitHub**: `https://github.com/sree-hari-v/department-grievance-portal`
+
+#### 4. Music Player
+- **Description**: A sleek, modern offline music player for Android built with Flutter, inspired by Spotify's design language.
+- **Challenge**: Modern Android scoped storage restrictions, low-latency offline audio rendering, and dynamic lyrics synchronization with offline caching.
+- **Solution**: Feature-driven clean architecture using Riverpod 2.x, `just_audio` engine for native background media playback, Storage Access Framework (`saf`) integration, and LRCLIB synchronized lyrics with local disk caching.
+- **Features**: High-fidelity offline playback, synced karaoke lyrics, in-app lyrics translation, Spotify-inspired Canvas visualizer, and modern Android SAF scoped storage.
+- **Impact**: Spotify-grade dark aesthetic audio experience with zero invasive storage permissions and robust offline access.
+- **Tech Stack**: Flutter, Dart, Android, Riverpod 2.x, just_audio, LRCLIB API.
+- **Live / App Link**: `https://github.com/sree-hari-v/music-player/releases/tag/v1.0.0`
+- **GitHub**: `https://github.com/sree-hari-v/music-player`
 
 ---
 

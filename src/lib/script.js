@@ -742,6 +742,25 @@ export default function initInteractions() {
       techUsed: ["Next.js", "Tailwind CSS", "Firebase", "TypeScript"],
       liveLink: "https://cs-dept-grievance-portal.vercel.app/",
       githubLink: "https://github.com/sree-hari-v/department-grievance-portal"
+    },
+    {
+      title: "Music Player",
+      description: "A sleek, modern offline music player for Android built with Flutter. Inspired by Spotify's design language, featuring synchronized karaoke lyrics, lyrics translation, full-screen interactive Canvas visuals, and modern Android Storage Access Framework (SAF) integration.",
+      challenge: "Modern Android scoped storage restricts broad file access, while high-performance offline playback requires responsive low-latency audio decoding, real-time synchronized lyrics rendering, and dynamic ID3 metadata extraction without UI jitter.",
+      solution: "Engineered a clean, feature-driven architecture using Flutter and Riverpod 2.x, integrating just_audio for background playback and lock-screen controls, saf for scoped folder permissions, and LRCLIB API with multi-level offline caching.",
+      features: [
+        "High-Fidelity Offline Playback (just_audio)",
+        "Synchronized & Translated Karaoke Lyrics (LRCLIB)",
+        "Spotify-Inspired Fullscreen Canvas Visuals",
+        "Modern Android Scoped Storage (SAF)",
+        "Dynamic Queue & Track Metadata Inspector"
+      ],
+      impact: "Delivered a Spotify-grade offline music listening experience with zero invasive storage permissions and robust offline caching.",
+      techUsed: ["Flutter", "Dart", "Android", "Riverpod", "just_audio", "LRCLIB API"],
+      liveLink: "https://github.com/sree-hari-v/music-player/releases/tag/v1.0.0",
+      liveLabel: "Live / APK Release",
+      liveIcon: "fas fa-external-link-alt",
+      githubLink: "https://github.com/sree-hari-v/music-player"
     }
   ];
 
@@ -774,7 +793,7 @@ export default function initInteractions() {
     </div>
     <div style="display:flex; gap:12px; flex-wrap:wrap;">
       <a href="${project.githubLink}" target="_blank" style="padding:12px 18px; border:1px solid var(--glass-border); border-radius:10px; font-weight:800;"><i class="fab fa-github"></i> GitHub</a>
-      <a href="${project.liveLink}" target="_blank" style="padding:12px 18px; background:rgba(var(--glow-rgb) / 0.10); color:var(--primary); border-radius:10px; font-weight:900;"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+      <a href="${project.liveLink}" target="_blank" style="padding:12px 18px; background:rgba(var(--glow-rgb) / 0.10); color:var(--primary); border-radius:10px; font-weight:900;"><i class="${project.liveIcon || 'fas fa-external-link-alt'}"></i> ${project.liveLabel || 'Live Demo'}</a>
     </div>
   `;
 
