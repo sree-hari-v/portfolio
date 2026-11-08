@@ -209,14 +209,15 @@ export function setupChatbot() {
       // ==========================================
       {
         keywords: ["skills", "technical skills", "tech stack", "technologies", "what do you know", "expertise", "what can you do", "stack", "technical toolkit", "arsenal"],
-        answer: `Sreehari's Technical Skills & Tech Stack:
+        answer: `Sreehari's 6-Tier Tech Arsenal includes 21 core technologies:
+• Tier 1 (Peak): Next.js
+• Tier 2 (Core Frontend): React.js, TypeScript
+• Tier 3 (Web Foundation & Runtime): JavaScript, Tailwind CSS, Node.js
+• Tier 4 (Backend & Systems): Python, Django, Java, Apex
+• Tier 5 (Data Layer & Services): SQL, PostgreSQL, MongoDB, Redis, Firebase
+• Tier 6 (DevOps & Infrastructure): AWS, Docker, Kubernetes, Linux, Git, GitHub Actions
 
-• Frontend: Next.js, React.js, TypeScript, JavaScript, Tailwind CSS
-• Backend: Node.js, Python, Django, Java, Apex
-• Databases: SQL, PostgreSQL, MongoDB, Redis, Firebase
-• DevOps & Tools: AWS, Docker, Kubernetes, Linux, Git, GitHub Actions
-
-Ask me about any specific technology or category for more details!`
+Ask me about any specific technology for more details!`
       },
       {
         keywords: ["frontend", "front end", "ui development", "ui", "user interface", "client side", "web design"],
