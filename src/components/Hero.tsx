@@ -104,7 +104,9 @@ export default function Hero() {
 
     // If reduced motion, complete immediately
     if (prefersReducedMotion) {
-      setIsAssembled(true);
+      setTimeout(() => {
+        setIsAssembled(true);
+      }, 0);
       if (cursorContainerRef.current) {
         cursorContainerRef.current.style.display = 'none';
       }
