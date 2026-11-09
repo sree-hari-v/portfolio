@@ -61,38 +61,23 @@ const getCornerPos = (idx: number, w: number, h: number, extraOffset = 70) => {
   }
 };
 
-// Trajectories for cursors to move away from words and disperse into space
-const DISPERSE_AWAY_VECTORS = [
-  // 0: Letter S -> moves left & slightly up
-  { dx: -140, dy: -50, delay: 0 },
-  // 1: Letter R -> moves up-left
-  { dx: -100, dy: -130, delay: 30 },
-  // 2: Letter E -> moves straight up
-  { dx: -40, dy: -150, delay: 60 },
-  // 3: Letter E -> moves down-left
-  { dx: -70, dy: 130, delay: 20 },
-  // 4: Letter H -> moves straight down
-  { dx: 0, dy: 150, delay: 50 },
-  // 5: Letter A -> moves down-right
-  { dx: 70, dy: 130, delay: 20 },
-  // 6: Letter R -> moves straight up
-  { dx: 40, dy: -150, delay: 60 },
-  // 7: Letter I -> moves up-right
-  { dx: 100, dy: -120, delay: 40 },
-  // 8: Letter V -> moves right & slightly up
-  { dx: 150, dy: -40, delay: 10 },
-  // 9: Link "Resume" -> moves down-left away from link
-  { dx: -130, dy: 100, delay: 40 },
-  // 10: Link "GitHub" -> moves straight down
-  { dx: -40, dy: 130, delay: 70 },
-  // 11: Link "LinkedIn" -> moves straight down
-  { dx: 40, dy: 130, delay: 50 },
-  // 12: Link "Mail" -> moves down-right away from link
-  { dx: 130, dy: 100, delay: 30 },
-  // 13: "CLICK HERE" -> moves downwards towards bottom
-  { dx: 0, dy: 120, delay: 40 },
-  // 14: Accent Picker -> moves upwards towards top
-  { dx: 0, dy: -100, delay: 20 },
+// Natural "here and there" offsets (45-75px away from words) and staggered random disappear
+const RANDOM_DISSOLVE_CURSORS = [
+  { dx: -70, dy: -35, delay: 100, duration: 190 }, // 0: 'S'
+  { dx: 35, dy: -60, delay: 240, duration: 180 },  // 1: 'R'
+  { dx: -45, dy: 50, delay: 80, duration: 200 },   // 2: 'E'
+  { dx: 20, dy: -65, delay: 320, duration: 180 },  // 3: 'E'
+  { dx: 45, dy: 55, delay: 170, duration: 190 },   // 4: 'H'
+  { dx: 65, dy: -30, delay: 70, duration: 210 },   // 5: 'A'
+  { dx: -25, dy: 60, delay: 290, duration: 180 },  // 6: 'R'
+  { dx: -55, dy: -45, delay: 210, duration: 190 }, // 7: 'I'
+  { dx: 75, dy: 25, delay: 130, duration: 200 },   // 8: 'V'
+  { dx: -60, dy: 50, delay: 250, duration: 180 },  // 9: Resume
+  { dx: -15, dy: 55, delay: 90, duration: 200 },   // 10: GitHub
+  { dx: 25, dy: 55, delay: 350, duration: 180 },   // 11: LinkedIn
+  { dx: 60, dy: 45, delay: 150, duration: 200 },   // 12: Mail
+  { dx: 0, dy: 55, delay: 270, duration: 190 },    // 13: CLICK HERE
+  { dx: 0, dy: -50, delay: 190, duration: 190 },   // 14: Accent Picker
 ];
 
 export default function CursorPreloader() {
@@ -391,8 +376,8 @@ export default function CursorPreloader() {
           return { x: targetX, y: targetY, rot: -15, opacity: 1, color };
         });
         updateCursors(nextCursors);
-      } else if (elapsed < 6650) {
-        // --- PHASE 4: Drag complete -> cursors move away from words and disappear into space ---
+      } else if (elapsed < 6500) {
+        // --- PHASE 4: Drag complete -> cursors move a bit here and there away from words and randomly disappear ---
         setPhase('move-away');
         setBloomActive(true);
 
@@ -410,23 +395,23 @@ export default function CursorPreloader() {
 
         const nextCursors = CURSOR_COLORS.map((color, i) => {
           const start = releasePositionsRef.current![i];
-          const vec = DISPERSE_AWAY_VECTORS[i] || { dx: 0, dy: -120, delay: 0 };
+          const cfg = RANDOM_DISSOLVE_CURSORS[i] || { dx: 0, dy: -50, delay: 150, duration: 190 };
 
-          if (timeSinceDrag < vec.delay) {
-            // Still resting at item position for a split instant
-            return { x: start.x, y: start.y, rot: -15, opacity: 1, color };
+          // Movement: gentle, modest drift away from the words (45-75px over ~550ms)
+          const moveProgress = easeOutCubic(Math.min(1, timeSinceDrag / 550));
+          const curX = start.x + cfg.dx * moveProgress;
+          const curY = start.y + cfg.dy * moveProgress;
+
+          // Tip dynamically points slightly along the drift
+          const driftAngle = Math.atan2(cfg.dy, cfg.dx) * (180 / Math.PI);
+          const rot = driftAngle + 135;
+
+          // Random disappearance: each cursor begins fading at its own randomized delay
+          let opacity = 1;
+          if (timeSinceDrag > cfg.delay) {
+            const fadeProgress = Math.min(1, (timeSinceDrag - cfg.delay) / cfg.duration);
+            opacity = Math.max(0, 1 - fadeProgress);
           }
-
-          const localProgress = easeOutCubic(Math.min(1, (timeSinceDrag - vec.delay) / 720));
-          const curX = start.x + vec.dx * localProgress;
-          const curY = start.y + vec.dy * localProgress;
-
-          // Tip dynamically points in the move-away flight path
-          const flightAngle = Math.atan2(vec.dy, vec.dx) * (180 / Math.PI);
-          const rot = flightAngle + 135;
-
-          // Smoothly dissolves into nothingness as it moves away
-          const opacity = Math.max(0, 1 - Math.pow(localProgress, 1.25));
 
           return { x: curX, y: curY, rot, opacity, color };
         });
@@ -454,9 +439,7 @@ export default function CursorPreloader() {
   return (
     <div
       ref={containerRef}
-      className={`cursor-preloader-root ${theme === 'light' ? 'is-light' : 'is-dark'} ${
-        phase === 'move-away' || phase === 'exit' ? 'is-exiting' : ''
-      }`}
+      className={`cursor-preloader-root ${theme === 'light' ? 'is-light' : 'is-dark'}`}
       data-theme={theme}
       aria-label="Loading portfolio animation"
       onClick={finishPreloader}
