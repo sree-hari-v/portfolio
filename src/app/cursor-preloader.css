@@ -1,0 +1,254 @@
+/* ==========================================================================
+   CURSOR PRELOADER ANIMATION
+   Multiplayer Figma-style cursor arrangement & preloader effect
+   Supports both Dark Mode & Light Mode with signature red typography
+   ========================================================================== */
+
+.cursor-preloader-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  background: #000000;
+  overflow: hidden;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cursor-preloader-root.is-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preloader-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Light Mode Theme Adaptation
+   ========================================================================== */
+.cursor-preloader-root.is-light,
+.cursor-preloader-root[data-theme="light"],
+body[data-theme="light"] .cursor-preloader-root,
+.cursor-preloader-root.is-light .preloader-overlay,
+.cursor-preloader-root[data-theme="light"] .preloader-overlay,
+body[data-theme="light"] .cursor-preloader-root .preloader-overlay {
+  background: var(--bg-color, #f5f7fa);
+}
+
+/* While preloader is active, hide custom cursor and stage elements underneath */
+body.preloader-active .cursor-dot,
+body.preloader-active .cursor-outline {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+body.preloader-active #cinStage .cin-center-inner,
+body.preloader-active #cinStage .accent-picker,
+body.preloader-active #cinStage .cin-cta {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Preloader heading container - transparent background so no box can ever show */
+.preloader-cin-name {
+  background: transparent !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  opacity: 1 !important;
+  filter: blur(0px) !important;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Individual letter spans - Signature Vibrant Red (#E84545)
+   ========================================================================== */
+.preloader-letter-span {
+  display: inline-block;
+  position: relative;
+  color: #E84545 !important;
+  background: linear-gradient(105deg,
+      #ffffff 0%,
+      #FF7B7B 25%,
+      #E84545 50%,
+      #D32F2F 75%,
+      #ffffff 100%) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow:
+    0 0 16px rgba(232, 69, 69, 0.55),
+    0 0 35px rgba(232, 69, 69, 0.35),
+    0 0 70px rgba(232, 69, 69, 0.2);
+  -webkit-text-stroke: 1.2px rgba(232, 69, 69, 0.85);
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.preloader-letter-span.is-space {
+  width: clamp(14px, 3.2vw, 38px);
+}
+
+/* Light Mode letter styling - Vibrant signature red with high contrast and crisp stroke */
+.cursor-preloader-root.is-light .preloader-letter-span,
+.cursor-preloader-root[data-theme="light"] .preloader-letter-span,
+body[data-theme="light"] .cursor-preloader-root .preloader-letter-span {
+  color: #E84545 !important;
+  background: linear-gradient(105deg,
+      #111111 0%,
+      #E84545 35%,
+      #FF5C5C 50%,
+      #E84545 65%,
+      #111111 100%) !important;
+  background-size: 200% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow:
+    0 4px 16px rgba(232, 69, 69, 0.35),
+    0 10px 30px rgba(232, 69, 69, 0.18) !important;
+  -webkit-text-stroke: 1px rgba(232, 69, 69, 0.7) !important;
+}
+
+/* Neon glow bloom flash when all elements lock into place - Dark Mode */
+.preloader-cin-name.bloom-active .preloader-letter-span {
+  text-shadow:
+    0 0 25px rgba(232, 69, 69, 0.95),
+    0 0 50px rgba(232, 69, 69, 0.8),
+    0 0 100px rgba(232, 69, 69, 0.5),
+    0 0 150px rgba(232, 69, 69, 0.3) !important;
+  -webkit-text-stroke: 1.8px rgba(232, 69, 69, 1) !important;
+  transition: text-shadow 0.4s ease-out, -webkit-text-stroke 0.4s ease-out;
+}
+
+/* Neon glow bloom flash - Light Mode */
+.cursor-preloader-root.is-light .preloader-cin-name.bloom-active .preloader-letter-span,
+.cursor-preloader-root[data-theme="light"] .preloader-cin-name.bloom-active .preloader-letter-span,
+body[data-theme="light"] .cursor-preloader-root .preloader-cin-name.bloom-active .preloader-letter-span {
+  text-shadow:
+    0 0 25px rgba(232, 69, 69, 0.85),
+    0 8px 30px rgba(232, 69, 69, 0.45) !important;
+  -webkit-text-stroke: 1.6px rgba(232, 69, 69, 1) !important;
+  transition: text-shadow 0.4s ease-out, -webkit-text-stroke 0.4s ease-out;
+}
+
+/* ==========================================================================
+   Links row & Individual draggable link items
+   ========================================================================== */
+.preloader-cin-links {
+  opacity: 1;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 34px);
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.preloader-link-item {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  padding: 10px 8px;
+  font-weight: 500;
+  display: inline-block;
+  white-space: nowrap;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+/* Links in Light Mode - Crisp, readable #555555 matching the page behind */
+.cursor-preloader-root.is-light .preloader-link-item,
+.cursor-preloader-root[data-theme="light"] .preloader-link-item,
+body[data-theme="light"] .cursor-preloader-root .preloader-link-item {
+  color: #555555 !important;
+  font-weight: 500 !important;
+}
+
+/* Accent picker container */
+.preloader-accent-picker {
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .preloader-accent-picker {
+    left: 50% !important;
+    right: auto !important;
+    top: 24px !important;
+  }
+}
+
+/* CTA button - Dark Mode */
+.preloader-cin-cta {
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* CTA button - Light Mode */
+.cursor-preloader-root.is-light .preloader-cin-cta,
+.cursor-preloader-root[data-theme="light"] .preloader-cin-cta,
+body[data-theme="light"] .cursor-preloader-root .preloader-cin-cta {
+  color: #555555 !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Cursors layer */
+.preloader-cursors-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.preloader-cursor-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+
+.preloader-cursor-svg {
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.45));
+}
+
+/* Mobile responsive rules matching landing page */
+@media (max-width: 768px) {
+  .preloader-cin-links {
+    gap: 8px 13px !important;
+    margin-top: 14px !important;
+  }
+
+  .preloader-link-item {
+    font-size: 10px !important;
+    letter-spacing: .16em !important;
+    padding: 8px 5px !important;
+  }
+
+  .preloader-cin-cta {
+    bottom: 110px !important;
+    padding: 11px 14px !important;
+    font-size: 10px !important;
+    border-radius: 999px !important;
+  }
+}

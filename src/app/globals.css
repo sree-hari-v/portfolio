@@ -1,3 +1,5 @@
+@import "./cursor-preloader.css";
+
 :root {
   --bg-color: #050505;
   --card-bg: #121212;

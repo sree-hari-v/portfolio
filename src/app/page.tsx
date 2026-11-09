@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import './globals.css';
 import initInteractions from '@/lib/script';
 import { setupChatbot } from '@/lib/chatbot';
+import CursorPreloader from '@/components/CursorPreloader';
 
 interface PortfolioWindow extends Window {
   toggleTheme?: () => void;
@@ -27,6 +28,8 @@ export default function Portfolio() {
 
   return (
     <>
+      <CursorPreloader />
+
       {/* Original Portfolio Content */}
 
       <div className="cursor-dot"></div>
