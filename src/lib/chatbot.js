@@ -209,13 +209,11 @@ export function setupChatbot() {
       // ==========================================
       {
         keywords: ["skills", "technical skills", "tech stack", "technologies", "what do you know", "expertise", "what can you do", "stack", "technical toolkit", "arsenal"],
-        answer: `Sreehari's 6-Tier Tech Arsenal includes 21 core technologies:
-• Tier 1 (Peak): Next.js
-• Tier 2 (Core Frontend): React.js, TypeScript
-• Tier 3 (Web Foundation & Runtime): JavaScript, Tailwind CSS, Node.js
-• Tier 4 (Backend & Systems): Python, Django, Java, Apex
-• Tier 5 (Data Layer & Services): SQL, PostgreSQL, MongoDB, Redis, Firebase
-• Tier 6 (DevOps & Infrastructure): AWS, Docker, Kubernetes, Linux, Git, GitHub Actions
+        answer: `Sreehari's Tech Stack includes 21 core technologies:
+• Frontend: Next.js, React.js, TypeScript, JavaScript, Tailwind CSS
+• Backend: Node.js, Python, Django, Java, Apex
+• Databases & Storage: SQL, PostgreSQL, MongoDB, Redis, Firebase
+• DevOps & Cloud: AWS, Docker, Kubernetes, Linux, Git, GitHub Actions
 
 Ask me about any specific technology for more details!`
       },
@@ -265,7 +263,7 @@ Ask me about any specific technology for more details!`
       // ==========================================
       {
         keywords: ["next.js", "nextjs", "next js", "app router", "ssr", "server side rendering"],
-        answer: `Next.js is Sreehari's primary framework (placed at the Peak of his Tech Arsenal). He leverages Next.js App Router, Server Components, SSR/SSG, and API routes to build fast, SEO-optimized web applications. Both this portfolio and his major projects (EduNex and Grievance Portal) are built on Next.js.`
+        answer: `Next.js is Sreehari's primary full-stack framework. He leverages Next.js App Router, Server Components, SSR/SSG, and API routes to build fast, SEO-optimized web applications. Both this portfolio and his major projects (EduNex and Grievance Portal) are built on Next.js.`
       },
       {
         keywords: ["react", "react.js", "reactjs", "react 19", "hooks", "components"],
